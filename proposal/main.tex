@@ -6,51 +6,56 @@
 \usepackage[document]{ragged2e}
 \usepackage[super]{nth}
 \usepackage{parskip}
+\usepackage{hyperref}
 
 \pagestyle{headings}
 \setlength{\parindent}{0pt}
 
-\textwidth = 400pt
-\oddsidemargin = 35pt
-\topmargin = -20pt
-\textheight = 650pt
+\textwidth = 460pt
+\oddsidemargin = 10pt
+\topmargin = -60pt
+\textheight = 690pt
 
 \title{\textbf{Project Proposal}\par Computer-Aided Diagnostics}
 \author{
-João Carlos Ramos Gonçalves Matos – up201704111\\
+João Carlos Ramos Gonçalves de Matos – up201704111\\
 Maria Jorge Miranda Loureiro – up201704188\\
 Maria Manuel Domingos Carvalho – up201706990\\
 }
-\date{\nth{10} November 2020}
+\date{\nth{9} November 2020}
 
 \begin{document}
 
 \maketitle
+\thispagestyle{empty} 
 
+
+\centering
+\Large
+\textbf{Analysis of Voice Data towards Biometric Identification:\\ Age, Gender and Identity Classification}
 \vspace{5mm}
-\justify
-\setlength{\parindent}{0pt}
 
+\justify
+\normalsize
+\setlength{\parindent}{0pt}
 \textbf{Dataset - BVC Voice Dataset [1]}\par
 
-The Biometrics Visions and Computing (BVC) Gender & Age from voice dataset comprises voice utterances from 526 individuals at one to five voice recordings per individual, of which 336 are males and 190 are females. The total number of voice utterances are 3,964 consisting of 2,149 male and 1,815 female voice utterances. Five different speeches of English and the equivalent translated native languages were acquired from the subjects in the first and second sessions. One to five voice recordings in English language and Native languages were acquired from each of the subjects. Twenty-eight different native languages make up the native language set.\par
+The Biometrics Visions and Computing (BVC) Gender \& Age from voice dataset comprises voice utterances from 526 individuals at 1 to 5 voice recordings per individual, of which 336 are males and 190 are females. The total number of voice utterances are 3,964 consisting of 2,149 male and 1,815 female voice utterances. Five different speeches of English and the equivalent translated Native languages were acquired from the subjects in the \nth{1} and \nth{2} sessions. Each subject recorded 1 to 5 voice recordings in English language and their Native languages. The Native language set is made up of 28 different languages.\par
 
-
-\vspace{5mm}
+\vspace{2mm}
 \textbf{Project Idea}\par
-Voice verification and gender classification from voice will be carried out in the context of native (mother tongue) languages and lingua franca languages.\par
+ The aim of this project will be biometrics evaluation, from voice samples of English and Native Languages audio records, with gender and age classification. As a second goal, it will be evaluated whether a test voice is from a new identity, or from a known one, in a subset of chosen identities. Differences in biometrics classification using mother tongue or second language will also be assessed, since previous studies have shown better classification quality when using mother tongue voice recordings [1]. \par
+ 
+ To achieve these goals, several steps will be taken during project development. Firstly, data preprocessing will be carried out, followed by feature extraction from audio data. Next, separation of training and tests sets will be performed. Using the training set, different age and gender classifiers will be tested and implemented - one of them will be chosen and optimized. Besides that, identity classifiers will also be tested, choosing the best fit. Then, using both training and test sets, the chosen models will be evaluated through commonly used performance metrics. Finally, results will be analysed and compared with previous studies, in order to validate our model.
 
-\vspace{5mm}
-\textbf{Software required}\par
-Python
+\vspace{2mm}
+\textbf{Software Required}\par
+Python, with most common libraries for Machine Learning: NumPy, scikit-learn, Pandas PyThorch. \par
+An additional Python library for audio feature segmentation, classification, segmentation and applications, pyAudioAnalysis, found here: \url{https://github.com/tyiannak/pyAudioAnalysis} \par
 
-\vspace{5mm}
-\textbf{Papers to read (1-3)}\par
-[1]	O. Iloanusi et al., Voice Recognition and Gender Classification in the Context of Native Languages and Lingua Franca. 2019, pp. 175-179.
-
-
-
+\vspace{2mm}
+\textbf{Papers to Read}\par
+[1]	O. Iloanusi et al., Voice Recognition and Gender Classification in the Context of Native Languages and Lingua Franca. 2019, pp. 175-179.\par
+[2] Rami S. Alkhawaldeh, "DGR: Gender Recognition of Human Speech Using One-Dimensional Conventional Neural Network", Scientific Programming, vol. 2019, 12 pages, 2019.
 
 \end{document}
-
-
