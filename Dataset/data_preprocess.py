@@ -7,8 +7,8 @@ Created on Wed Dec 23 18:19:17 2020
 
 import numpy as np
 
-rawData = np.genfromtxt('dataset/extracted_features_all.csv', delimiter=',', encoding='utf8', dtype=np.str)
-rawSubjectsInfo = np.genfromtxt('dataset/subjects_information_all.csv', delimiter=';', encoding='utf8', dtype=np.str)
+rawData = np.genfromtxt('extracted_features_all.csv', delimiter=',', encoding='utf8', dtype=np.str)
+rawSubjectsInfo = np.genfromtxt('subjects_information_all.csv', delimiter=';', encoding='utf8', dtype=np.str)
 
 # remove headers
 data = rawData[2:, 2:] 
