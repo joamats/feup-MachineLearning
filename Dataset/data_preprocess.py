@@ -2,7 +2,11 @@
 """
 Created on Sun Dec 27 01:41:21 2020
 
-@author: User
+@authors:
+    João Matos
+    Maria Loureiro
+    Maria Carvalho
+    
 """
 
 import numpy as np

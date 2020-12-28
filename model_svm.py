@@ -2,7 +2,11 @@
 """
 Created on Mon Dec 28 01:39:42 2020
 
-@author: João Matos
+@authors:
+    João Matos
+    Maria Loureiro
+    Maria Carvalho
+    
 """
 
 from dataset.data_preprocess import getData
