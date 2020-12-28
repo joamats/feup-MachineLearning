@@ -12,6 +12,7 @@ Created on Sun Dec 27 01:41:21 2020
 import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
+import pickle
 
 #%% Definition of auxiliary functions, for data split (by key)
 
@@ -20,7 +21,6 @@ def train_val_test_split(X, tr_size=0.7):
     tr, aux = train_test_split(X, train_size=tr_size, shuffle=True)
 
     # nested hold out
-    
     val, ts = train_test_split(aux, test_size=0.5, shuffle=True)
     
     
@@ -32,12 +32,12 @@ def train_val_test_split_by_key(X, key, tr_size=0.6):
     return [X.loc[X[key].isin(subset)] for subset in subsets]
 
 #%% Definition of function that returns data split and pre-process
-# to be called at the beginning of each model assessment
+# to be saved in pickle format
 
 def getData():
     
-    rawData = np.genfromtxt('dataset/extracted_features_all.csv', delimiter=',', encoding='utf8', dtype=np.str)
-    rawSubjectsInfo = np.genfromtxt('dataset/subjects_information_all.csv', delimiter=';', encoding='utf8', dtype=np.str)
+    rawData = np.genfromtxt('Dataset/extracted_features_all.csv', delimiter=',', encoding='utf8', dtype=np.str)
+    rawSubjectsInfo = np.genfromtxt('Dataset/subjects_information_all.csv', delimiter=';', encoding='utf8', dtype=np.str)
     
     # remove headers
     data = rawData[2:, 2:] 
@@ -135,3 +135,18 @@ def getData():
     
     return datasetsEnglish, datasetsNative
 
+#%% Definition of function that creates pickle file
+
+def createPickleFile(variable, pickleName):
+    PIK = pickleName+".dat"
+
+    with open(PIK, "wb") as f:
+        pickle.dump(variable, f)
+        
+
+#%% Create pickle files with all necessary variables
+
+[datasetsEnglish, datasetsNative] = getData()
+
+createPickleFile(datasetsEnglish, 'datasetsEnglish')
+createPickleFile(datasetsNative, 'datasetsNative')
