@@ -22,16 +22,13 @@ Access element in row: datasetsEnglish[0][0]['Infos'][0]
 
 from model_metrics import getMetrics, displayMetrics
 from sklearn.ensemble import RandomForestClassifier
-import pickle
+from pickle_handling import getPickleFile
 import numpy as np
 import pandas as pd
 
 #%% Get all necessary variables to train the model
 
-PIK="datasetsEnglish.dat"
-with open(PIK, "rb") as f:
-    datasetsEnglish=pickle.load(f)
-
+datasetsEnglish = getPickleFile("datasetsEnglish.dat")
 #depois adicionar aqui um ciclo for para treinar tds os modelos
 #por agora testo só com o primeiro set:
 datasetsEnglish = datasetsEnglish[0] 

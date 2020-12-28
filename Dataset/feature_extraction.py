@@ -8,7 +8,7 @@ Created on Sun Nov 15 14:20:14 2020
     Maria Carvalho
 
 """
-
+from pickle_handling import createPickleFile
 from pyAudioAnalysis import MidTermFeatures
 import pandas as pd
 import numpy as np
@@ -34,6 +34,6 @@ mid_term_features = np.vstack([mid_feature_names, mid_term_features])
 mid_term_features=np.append(wav_file_list2, mid_term_features, axis=1)
 df=pd.DataFrame(mid_term_features)
 
-#save dataframe in csv
-pd.DataFrame(df).to_csv("C:/Users/m4ria/OneDrive/Documentos/4ano/DACO/ProjetoDACO/Dataset/extracted_features.csv")
+#save dataframe in pickle
+createPickleFile(df, "extracted_features")
 
