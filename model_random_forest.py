@@ -20,23 +20,24 @@ from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import pandas as pd
 from data_load import getDataset
+from sklearn.model_selection import GridSearchCV
 
 #%% Load Datasets
 
 languages = ['Native', 'English']
 numLanguages = len(languages)
 numMetrics = 6  
-numValues = 2   # Mean, Standard Deviation   
+numValues = 2   # Mean, Standard Deviation
 
 sMetrics_tr = np.zeros((numLanguages, numMetrics, numValues))
 sMetrics_val = np.zeros((numLanguages, numMetrics, numValues))
 
 
 # Define Parameters for Train
-n_estimators_ = 500
-max_features_ = 10
+n_estimators_ = 200
+max_features_ = 'auto'
 max_depth_ = 10
-min_samples_leaf_ = 10
+min_samples_leaf_ = 20
 with_PCA_=True
 
 print('\nRandom Forest Model \n')
@@ -57,7 +58,25 @@ for k, language in enumerate(languages):
         x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language, with_PCA=with_PCA_)
         
         # Train SVM
-        model = RandomForestClassifier(n_estimators=n_estimators_, max_features=max_features_, max_depth= max_depth_, min_samples_leaf=min_samples_leaf_, random_state=0).fit(x_tr, y_tr)
+        model = RandomForestClassifier(n_estimators=n_estimators_, max_features=max_features_, max_depth= max_depth_, min_samples_leaf=min_samples_leaf_, random_state=42).fit(x_tr, y_tr)
+        
+        """
+        Find best features to use in model:
+        rfc = RandomForestClassifier(n_jobs=-1,max_features= 'sqrt' ,n_estimators=50, oob_score = True) 
+
+        param_grid = { 
+            'n_estimators': [50, 100, 200, 700, 1000],
+            'max_features': ['auto', 'sqrt', 'log2'],
+            'max_depth': [5, 10, 20, 30],
+            'min_samples_leaf': [20, 50, 100]
+        }
+
+        CV_rfc = GridSearchCV(estimator=rfc, param_grid=param_grid, cv= 5)
+        CV_rfc.fit(x_tr, y_tr)
+        
+        print (CV_rfc.best_params_)
+        
+        """
         
         # Assess *this* model
         metrics_tr.append(getMetrics(model, x_tr, y_tr, 'withProbs'))
@@ -74,4 +93,4 @@ for k, language in enumerate(languages):
     print('Validation Set')
     displayGeneralMetrics(sMetrics_val)
     print('\n')
-    
+
