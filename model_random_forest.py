@@ -20,7 +20,7 @@ Access element in row: datasetsEnglish[0][0]['Infos'][0]
 
 """
 
-from model_metrics import getMetrics, displayMetrics
+from evaluation_metrics import getMetrics, displayMetrics
 from sklearn.ensemble import RandomForestClassifier
 from pickle_handling import getPickleFile
 import numpy as np

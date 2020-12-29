@@ -9,32 +9,31 @@ Created on Mon Dec 28 01:39:42 2020
     
 """
 
-from pickle_handling import getPickleFile
+from sklearn import svm
+from data_load import getSubset
+from evaluation_metrics import getMetrics, displayMetrics
 
-datasetsEnglish = getPickleFile("datasetsEnglish")
-datasetsNative = getPickleFile("datasetsNative")
+#%% Load Datasets
 
-"""
+#include a for loop with zip here
+number = 0
+language = "English"
+X_tr, y_tr, X_val, y_val, X_ts, y_ts = getSubset(number, language)
 
-#datasetsEnglish = datasetsEnglish[0] 
+#%% Train Models
 
-x_tr=datasetsEnglish[0]['Features']
-y_tr=datasetsEnglish[0]['Gender'][0]
+model = svm.SVC(kernel = "poly")
+model.fit(X_tr, y_tr)
 
-# x_val=datasetsEnglish[1]['Features']
-# y_val=datasetsEnglish[1]['Gender'][0]
+#%% Assess Performance
 
-# x_ts=datasetsEnglish[2]['Features']
-# y_ts=datasetsEnglish[2]['Gender'][0]
+score = model.score(X_val, y_val)
+print(score)
 
-# #Train Model
-# model = RandomForestClassifier(n_estimators=20, random_state=0).fit(x_tr, y_tr)
+#%%
 
-# #Get Model Metrics
-# score, roc_auc, pr_auc, f1, conf_matrix = getMetrics(model, x_val, y_val)
+# #%% Get and Display Model Metrics
 
+# score, roc_auc, pr_auc, f1, conf_matrix = getMetrics(model, X_val, y_val)
 
-#Display Model Metrics
-displayMetrics(score, roc_auc, pr_auc, f1, conf_matrix)
-
-"""
+# displayMetrics(score, roc_auc, pr_auc, f1, conf_matrix);

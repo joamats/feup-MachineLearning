@@ -14,7 +14,10 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_auc_sc
 #Receives models inputs and the trained model, returns its metrics
 def getMetrics(model, x, y):
     
-    probs = model.predict_proba(x)[:,1] #get models probabilities
+    #se o modelo for baseado numa discriminant function, n tem probabilidades!!!
+    #IMPORTANTE! ^^^^^^^^^^
+    
+    #probs = model.predict_proba(x)[:,1] #get models probabilities
 
     preds = model.predict(x) #get models results (0,1)
 
