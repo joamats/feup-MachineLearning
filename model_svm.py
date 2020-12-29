@@ -22,8 +22,12 @@ x_tr, y_tr, x_val, y_val, x_ts, y_ts = getSubset(number, language)
 
 #%% Train Models
 
+<<<<<<< HEAD
 model = svm.SVC(kernel = "poly")
 model.fit(x_tr, y_tr)
+=======
+model = svm.SVC(kernel = "poly").fit(X_tr, y_tr)
+>>>>>>> fa57cd469c3c28ba70e02616cf40d44543207b1b
 
 #%% Assess Performance
 

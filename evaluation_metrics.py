@@ -12,33 +12,38 @@ Created on Mon Dec 28 18:43:16 2020
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_auc_score, f1_score, average_precision_score
 
 #Receives models inputs and the trained model, returns its metrics
-def getMetrics(model, x, y):
+def getMetrics(model_type, model, x, y):
     
-    #se o modelo for baseado numa discriminant function, n tem probabilidades!!!
-    #IMPORTANTE! ^^^^^^^^^^
+    metrics=[]
     
-    #probs = model.predict_proba(x)[:,1] #get models probabilities
-
-    preds = model.predict(x) #get models results (0,1)
-
-    score = model.score(x,y) #get models accuracy
-
-    roc_auc = roc_auc_score(y,probs) #get roc auc 
-
-    pr_auc = average_precision_score(y, probs) #get precision recall
-
-    f1 = f1_score(y,preds) #get f1 score
+    preds=model.predict(x) #get models results (0,1)
     
-    conf_matrix = confusion_matrix(y, preds) #get confusion matrix
+    metrics.append(model.score(x,y)) #get models accuracy
     
-    return score, roc_auc, pr_auc, f1, conf_matrix
+    metrics.append(f1_score(y,preds)) #get f1 score
+    
+    metrics.append(confusion_matrix(y, preds)) #get confusion matrix
+    
+    if (model_type=='withProbs'):
+        probs = model.predict_proba(x)[:,1] #get models probabilities
+
+        metrics.append(roc_auc_score(y,probs)) #get roc auc 
+
+        metrics.append(average_precision_score(y, probs)) #get precision recall
+    
+    return metrics
 
 #Displays all metrics
-def displayMetrics(score, roc_auc, pr_auc, f1, conf_matrix):
+def displayMetrics(metrics):
     
-    cm_display = ConfusionMatrixDisplay(confusion_matrix=conf_matrix).plot()
-    print('The Accuracy of the model was ', f'{score:.3f}')
-    print('The Area under the ROC curve of the model was ' , f'{roc_auc:.3f}')
-    print('The Precision Recall of the model was ', f'{pr_auc:.3f}')
-    print('The F1 Score of the model was ' , f'{f1:.3f}')
+    cm_display = ConfusionMatrixDisplay(confusion_matrix=metrics[2]).plot()
+    
+    print('The Accuracy of the model was ', f'{metrics[0]:.3f}')
+    print('The F1 Score of the model was ' , f'{metrics[1]:.3f}')
+ 
+    if(len(metrics)==5):
+    
+        print('The Area under the ROC curve of the model was ' , f'{metrics[3]:.3f}')
+        
+        print('The Precision Recall of the model was ', f'{metrics[4]:.3f}')
  

@@ -22,39 +22,27 @@ Access element in row: datasetsEnglish[0][0]['Infos'][0]
 
 from evaluation_metrics import getMetrics, displayMetrics
 from sklearn.ensemble import RandomForestClassifier
-from pickle_handling import getPickleFile
 import numpy as np
 import pandas as pd
+from data_load import getSubset
 
-#%% Get all necessary variables to train the model
+#%% Load Datasets
 
-datasetsEnglish = getPickleFile("datasetsEnglish")
-datasetsNative = getPickleFile("datasetsNative")
+#include a for loop with zip here
+number = 0
+language = "English"
+X_tr, y_tr, X_val, y_val, X_ts, y_ts = getSubset(number, language)
 
+#%% Train Models
 
-"""
-#depois adicionar aqui um ciclo for para treinar tds os modelos
-#por agora testo só com o primeiro set:
-#datasetsEnglish = datasetsEnglish[0] 
+model = RandomForestClassifier(n_estimators=200, random_state=0).fit(X_tr, y_tr)
 
-x_tr=datasetsEnglish[0]['Features']
-y_tr=datasetsEnglish[0]['Gender'][0]
+#%% Assess Performance
 
-# x_val=datasetsEnglish[1]['Features']
-# y_val=datasetsEnglish[1]['Gender'][0]
-
-# x_ts=datasetsEnglish[2]['Features']
-# y_ts=datasetsEnglish[2]['Gender'][0]
-
-# #Train Model
-# model = RandomForestClassifier(n_estimators=20, random_state=0).fit(x_tr, y_tr)
-
-# #Get Model Metrics
-# score, roc_auc, pr_auc, f1, conf_matrix = getMetrics(model, x_val, y_val)
-
+#Get Model Metrics
+metrics = getMetrics('withProbs',model, X_val, y_val)
 
 #Display Model Metrics
-displayMetrics(score, roc_auc, pr_auc, f1, conf_matrix)
+displayMetrics(metrics)
 
-"""
 
