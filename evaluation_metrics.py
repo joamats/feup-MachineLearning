@@ -23,7 +23,7 @@ def getMetrics(model, x, y, model_type=None):
     metrics.append(f1_score(y,preds)) #get f1 score
     
     metrics.append(confusion_matrix(y, preds)) #get confusion matrix
-    
+
     if (model_type=='withProbs'):
         probs = model.predict_proba(x)[:,1] #get models probabilities
 
