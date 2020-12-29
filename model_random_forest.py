@@ -28,11 +28,12 @@ import pandas as pd
 
 #%% Get all necessary variables to train the model
 
-datasetsEnglish = getPickleFile("datasetsEnglish.dat")
+datasetsEnglish = getPickleFile("datasetsEnglish")
 #depois adicionar aqui um ciclo for para treinar tds os modelos
 #por agora testo só com o primeiro set:
-datasetsEnglish = datasetsEnglish[0] 
+#datasetsEnglish = datasetsEnglish[0] 
 
+"""
 x_tr=datasetsEnglish[0]['Features']
 y_tr=datasetsEnglish[0]['Gender'][0]
     
@@ -50,3 +51,5 @@ score, roc_auc, pr_auc, f1, conf_matrix = getMetrics(model, x_val, y_val)
 
 #Display Model Metrics
 displayMetrics(score, roc_auc, pr_auc, f1, conf_matrix)
+
+"""

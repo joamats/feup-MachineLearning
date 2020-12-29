@@ -7,7 +7,7 @@
 \usepackage[super]{nth}
 \usepackage{parskip}
 \usepackage{hyperref}
-
+\usepackage{capt-of}
 \pagestyle{headings}
 \setlength{\parindent}{0pt}
 
@@ -16,7 +16,7 @@
 \topmargin = -60pt
 \textheight = 690pt
 
-\title{\textbf{Analysis of Voice Data towards Biometric Identification:\\ Age, Gender and Identity Classification}\par Computer-Aided Diagnostics}
+\title{\textbf{Analysis of Voice Data towards Biometric Identification:\\ Gender, Age and Identity Classification}\par Computer-Aided Diagnostics}
 \author{
 João Carlos Ramos Gonçalves de Matos – up201704111\\
 Maria Jorge Miranda Loureiro – up201704188\\
@@ -42,8 +42,41 @@ Maria Manuel Domingos Carvalho – up201706990\\
 \textbf{I. Introduction}\par
 
 \vspace{2mm}
-\textbf{II. Feature Extraction }\par
+\textbf{II. Data Preparation }\par
 
+\vspace{2mm}
+\textbf{ A. Feature Extraction }\par
+To train machine learning models to classify gender, age and identity, voice signal features can be used as the training set of these models. Taking into account the different features considered relevant in the literature [1,2] , a set of signal features were chosen and extracted from all the utterances in the database (Table 1). At first, each model was trained with the complete set of features and then the features used were adjusted to each model, to improve its performance. The pyAudioAnalysis (version 0.3.6) python library was used to extract all audio features.
+
+\begin{center}
+\captionof{table}{List of all features extracted from voice signals.}
+\label{table1} % for use in \ref{table1} - to refer to the table number
+\begin{tabular}[c]{ |c| } 
+ \hline
+ \textbf{Feature Name}  \\ [1ex]
+ \hline
+ Zero Crossing Rate \\ [0.5ex]
+ Energy \\ [0.5ex]
+ Entropy of Energy \\ [0.5ex]
+ Spectral Centroid  \\ [0.5ex]
+ Spectral Spread \\ [0.5ex]
+ Spectral Entropy \\ [0.5ex]
+ Spectral Flux \\ [0.5ex]
+ Spectral Rolloff \\ [0.5ex]
+ 12 Mel Frequency Cepstral Coefficients \\ [0.5ex]
+ 11 Chroma Vectors \\ [0.5ex]
+ Chroma Deviation \\ [0.5ex]
+ \hline
+\end{tabular}
+\end{center}
+
+\vspace{2mm}
+\textbf{ B. Defining Classification Groups }\par
+Explain how we divided age and identity groups and why we separated native vs English utterances. 
+
+\vspace{2mm}
+\textbf{ C. Dataset Split }\par
+Explain the 10 nested hold outs and why we did that.
 
 \vspace{2mm}
 \textbf{III. Experiments, Results and Discussion }\par
