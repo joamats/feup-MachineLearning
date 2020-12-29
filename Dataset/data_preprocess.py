@@ -14,6 +14,14 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from pickle_handling import createPickleFile, getPickleFile
 from collections import Counter
+from sklearn.decomposition import PCA
+
+#%% Perform feature selection with PCA
+def featureSelection(x):
+    
+   pca = PCA(n_components=0.99, random_state=22).fit(x)
+    
+   return(pca.transform(x))
 
 #%% Definition of auxiliary functions, for data split (by key)
 
@@ -47,7 +55,11 @@ def getData():
     # remove headers
     subjectsInfo = rawSubjectsInfo[1:,:]
     data = rawData[1:, 1:] 
-    
+
+    # feature selection
+    data=data.astype(np.float)
+    data = featureSelection(data.astype(np.float))
+    data=data.astype(np.str)
     #%% Preparation of Infos Matrices
     
     # get the id of subjects, from the path name
@@ -143,5 +155,5 @@ def getData():
 [allDatasetsEnglish, allDatasetsNative] = getData()
 
 # create datasets in root
-createPickleFile(allDatasetsEnglish, '../datasetsEnglish')
-createPickleFile(allDatasetsNative, '../datasetsNative')
+createPickleFile(allDatasetsEnglish, '../datasetsEnglish_PCA')
+createPickleFile(allDatasetsNative, '../datasetsNative_PCA')

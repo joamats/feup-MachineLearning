@@ -7,6 +7,12 @@ Created on Mon Dec 28 01:45:59 2020
     Maria Loureiro
     Maria Carvalho
     
+    
+n_estimators: in general the more trees the less likely the algorithm is to overfit. So try increasing this. The lower this number, the closer the model is to a decision tree, with a restricted feature set.
+max_features: try reducing this number (try 30-50% of the number of features). This determines how many features each tree is randomly assigned. The smaller, the less likely to overfit, but too small will start to introduce under fitting.
+max_depth: Experiment with this. This will reduce the complexity of the learned models, lowering over fitting risk. Try starting small, say 5-10, and increasing you get the best result.
+min_samples_leaf: Try setting this to values greater than one. This has a similar effect to the max_depth parameter, it means the branch will stop splitting once the leaves have that number of samples each
+
 """
 
 from evaluation_metrics import getMetrics, getGeneralMetrics, displayGeneralMetrics
@@ -27,14 +33,13 @@ sMetrics_val = np.zeros((numLanguages, numMetrics, numValues))
 
 
 # Define Parameters for Train
-
-n_estimators_ = 200
-max_features_ = 15
-max_depth_ = 7
-min_samples_leaf_ = 2
+n_estimators_ = 500
+max_features_ = 10
+max_depth_ = 10
+min_samples_leaf_ = 10
 with_PCA_=True
 
-print('Random Forest Model \n')
+print('\nRandom Forest Model \n')
 print('PCA selection: ', with_PCA_)
 print('n_estimators =', n_estimators_)
 print('max_features =', max_features_)
