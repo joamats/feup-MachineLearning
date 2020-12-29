@@ -30,21 +30,16 @@ import pandas as pd
 
 datasetsEnglish = getPickleFile("datasetsEnglish")
 datasetsNative = getPickleFile("datasetsNative")
-# depois adicionar aqui um ciclo for para treinar tds os modelos
-# por agora testo só com o primeiro set:
-# datasetsEnglish = datasetsEnglish[0] 
 
-# x_tr=datasetsEnglish[0]['Features']
-# y_tr=datasetsEnglish[0]['Gender'][0]
+
+"""
 #depois adicionar aqui um ciclo for para treinar tds os modelos
 #por agora testo só com o primeiro set:
 #datasetsEnglish = datasetsEnglish[0] 
 
-"""
 x_tr=datasetsEnglish[0]['Features']
 y_tr=datasetsEnglish[0]['Gender'][0]
->>>>>>> 0a1e3b08869a48cf37d6ab5aaad7ccdc7aef0bde
-    
+
 # x_val=datasetsEnglish[1]['Features']
 # y_val=datasetsEnglish[1]['Gender'][0]
 
