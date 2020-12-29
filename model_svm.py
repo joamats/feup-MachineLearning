@@ -9,7 +9,8 @@ Created on Mon Dec 28 01:39:42 2020
     
 """
 
-from Dataset.data_preprocess import getData
+import pickle
+from pickle_handling import getPickleFile
 
-[datasetsEnglish, datasetsNative] = getData()
-
+datasetsEnglish = getPickleFile("datasetsEnglish")
+datasetsNative = getPickleFile("datasetsNative")
