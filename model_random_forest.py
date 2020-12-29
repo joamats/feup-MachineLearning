@@ -7,20 +7,9 @@ Created on Mon Dec 28 01:45:59 2020
     Maria Loureiro
     Maria Carvalho
     
-    
-Helping:
-    
-Access Set of 3 dataframes: datasetsEnglish[0]
-
-Access Train Dataset: datasetsEnglish[0][0]
-
-Access specfic column and row: datasetsEnglish[0][0]['Infos'][0]
-
-Access element in row: datasetsEnglish[0][0]['Infos'][0]
-
 """
 
-from evaluation_metrics import getMetrics, displayMetrics
+from evaluation_metrics import getMetrics, getGeneralMetrics, displayGeneralMetrics
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import pandas as pd
@@ -28,21 +17,40 @@ from data_load import getDataset
 
 #%% Load Datasets
 
-#include a for loop with zip here
-number = 0
-language = "English"
-X_tr, y_tr, X_val, y_val, X_ts, y_ts = getDataset(number, language)
+languages = ['Native', 'English']
+numLanguages = len(languages)
+numMetrics = 6  # Accuracy, F1-score, Confusion Matrix
+numValues = 2   # Mean, Standard Deviation   
 
-#%% Train Models
+sMetrics_tr = np.zeros((numLanguages, numMetrics, numValues))
+sMetrics_val = np.zeros((numLanguages, numMetrics, numValues))
 
-model = RandomForestClassifier(n_estimators=200, random_state=0).fit(X_tr, y_tr)
+for k, language in enumerate(languages):
+    
+    metrics_tr = []
+    metrics_val = []
+    
+    for number in range(10):
+        
+        # Get *this* dataset
+        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language)
+        
+        # Train SVM
+        model = RandomForestClassifier(n_estimators=200, random_state=0).fit(x_tr, y_tr)
+        
+        # Assess *this* model
+        metrics_tr.append(getMetrics(model, x_tr, y_tr, 'withProbs'))
+        metrics_val.append(getMetrics(model, x_val, y_val, 'withProbs'))
 
-#%% Assess Performance
+    #get mean and std for each metric
+    sMetrics_tr = getGeneralMetrics(metrics_tr, numMetrics)
+    sMetrics_val = getGeneralMetrics(metrics_val, numMetrics)
 
-#Get Model Metrics
-metrics = getMetrics(model, X_val, y_val,'withProbs')
-
-#Display Model Metrics
-displayMetrics(metrics)
-
-
+    print('\nLanguage:', language,'\n')
+    print('Training Set')
+    displayGeneralMetrics(sMetrics_tr)
+    print('\n')
+    print('Validation Set')
+    displayGeneralMetrics(sMetrics_val)
+    print('\n')
+    
