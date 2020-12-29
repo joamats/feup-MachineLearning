@@ -13,6 +13,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from pickle_handling import createPickleFile, getPickleFile
+import csv
 
 #%% Definition of auxiliary functions, for data split (by key)
 
@@ -39,14 +40,18 @@ def getData():
     rawData = getPickleFile("extracted_features")
     rawSubjectsInfo = np.genfromtxt('subjects_information_all.csv', delimiter=';', encoding='utf8', dtype=np.str)
     
+    # from dataframe to numpy
+    rawData = pd.DataFrame(rawData).to_numpy()
+    rawData = np.array(rawData, dtype = str)
+    
     # remove headers
     subjectsInfo = rawSubjectsInfo[1:,:]
-    data = rawData[1:, 2:] 
+    data = rawData[1:, 1:] 
     
     #%% Preparation of Infos Matrices
     
     # get the id of subjects, from the path name
-    names = np.char.split(rawData[2:,1], '_')
+    names = np.char.split(rawData[1:,0], '_')
     nameN = np.zeros((data.shape[0]))
     
     for i, name in enumerate(names):
@@ -110,14 +115,29 @@ def getData():
     dataEnglish = np.array(dataEnglish, dtype = object)
     dataNativeLanguage = np.array(dataNativeLanguage, dtype = object)
     
+    gE = [g[0] for g in dataEnglish[:,2]]
+    aE = [g[1] for g in dataEnglish[:,2]]
+    lE = [g[2] for g in dataEnglish[:,2]]
+    
+    
     # conversion of np.arrays to pd.DataFrames
     dfdataEnglish = pd.DataFrame({'ID': dataEnglish[:,0],
                                   'Features': dataEnglish[:,1],
-                                  'Infos': dataEnglish[:,2]})
+                                  'Gender': gE,
+                                  'Age': aE,
+                                  'Language': lE
+                                 })
+    
+    gN = [g[0] for g in dataNativeLanguage[:,2]] # native genders
+    aN = [g[1] for g in dataNativeLanguage[:,2]] # native ages
+    lN = [g[2] for g in dataNativeLanguage[:,2]] # native
     
     dfdataNativeLanguage = pd.DataFrame({'ID': dataNativeLanguage[:,0],
                                          'Features': dataNativeLanguage[:,1],
-                                         'Infos': dataEnglish[:,2]})
+                                         'Gender': gN,
+                                         'Age': aN,
+                                         'Language': lN
+                                         })
     
     #%% Split of dataset: training, validation, and test
     
@@ -133,11 +153,18 @@ def getData():
         datasetsEnglish.append(train_val_test_split_by_key(dfdataEnglish, 'ID', tr_size=0.6))
         datasetsNative.append(train_val_test_split_by_key(dfdataNativeLanguage, 'ID', tr_size=0.6))
     
+    # with open('languages_correspondence.csv', 'wb') as f:
+    #     csv.writer(f).writerows(languages)
+    
+    # np.savetxt('languages_correspondence.csv', languages, delimiter=",")
+    # np.savetxt('genders_correspondence.csv', genders, delimiter=",")
+
     return datasetsEnglish, datasetsNative
 
 #%% Create pickle files with all necessary variables
 
 [datasetsEnglish, datasetsNative] = getData()
 
-createPickleFile(datasetsEnglish, 'datasetsEnglish2')
-createPickleFile(datasetsNative, 'datasetsNative2')
+# create datasets in root
+createPickleFile(datasetsEnglish, '../datasetsEnglish')
+createPickleFile(datasetsNative, '../datasetsNative')

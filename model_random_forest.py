@@ -28,25 +28,26 @@ import pandas as pd
 
 #%% Get all necessary variables to train the model
 
-datasetsEnglish = getPickleFile("datasetsEnglish.dat")
-#depois adicionar aqui um ciclo for para treinar tds os modelos
-#por agora testo só com o primeiro set:
-datasetsEnglish = datasetsEnglish[0] 
+datasetsEnglish = getPickleFile("datasetsEnglish")
+datasetsNative = getPickleFile("datasetsNative")
+# depois adicionar aqui um ciclo for para treinar tds os modelos
+# por agora testo só com o primeiro set:
+# datasetsEnglish = datasetsEnglish[0] 
 
-x_tr=datasetsEnglish[0]['Features']
-y_tr=datasetsEnglish[0]['Gender'][0]
+# x_tr=datasetsEnglish[0]['Features']
+# y_tr=datasetsEnglish[0]['Gender'][0]
     
-x_val=datasetsEnglish[1]['Features']
-y_val=datasetsEnglish[1]['Gender'][0]
+# x_val=datasetsEnglish[1]['Features']
+# y_val=datasetsEnglish[1]['Gender'][0]
 
-x_ts=datasetsEnglish[2]['Features']
-y_ts=datasetsEnglish[2]['Gender'][0]
+# x_ts=datasetsEnglish[2]['Features']
+# y_ts=datasetsEnglish[2]['Gender'][0]
 
-#Train Model
-model = RandomForestClassifier(n_estimators=20, random_state=0).fit(x_tr, y_tr)
+# #Train Model
+# model = RandomForestClassifier(n_estimators=20, random_state=0).fit(x_tr, y_tr)
 
-#Get Model Metrics
-score, roc_auc, pr_auc, f1, conf_matrix = getMetrics(model, x_val, y_val)
+# #Get Model Metrics
+# score, roc_auc, pr_auc, f1, conf_matrix = getMetrics(model, x_val, y_val)
 
-#Display Model Metrics
-displayMetrics(score, roc_auc, pr_auc, f1, conf_matrix)
+# #Display Model Metrics
+# displayMetrics(score, roc_auc, pr_auc, f1, conf_matrix)
