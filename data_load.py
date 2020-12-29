@@ -15,7 +15,7 @@ from pickle_handling import getPickleFile
 
 # receives number (from 0 to 9) and language("English" or "Native")
 # returns X and y for tr, val, ts
-def getSubset(number, language):
+def getDataset(number, language):
     
     allDatasets = getPickleFile("datasets" + language)
 

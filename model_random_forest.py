@@ -24,14 +24,14 @@ from evaluation_metrics import getMetrics, displayMetrics
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
 import pandas as pd
-from data_load import getSubset
+from data_load import getDataset
 
 #%% Load Datasets
 
 #include a for loop with zip here
 number = 0
 language = "English"
-X_tr, y_tr, X_val, y_val, X_ts, y_ts = getSubset(number, language)
+X_tr, y_tr, X_val, y_val, X_ts, y_ts = getDataset(number, language)
 
 #%% Train Models
 
@@ -40,7 +40,7 @@ model = RandomForestClassifier(n_estimators=200, random_state=0).fit(X_tr, y_tr)
 #%% Assess Performance
 
 #Get Model Metrics
-metrics = getMetrics('withProbs',model, X_val, y_val)
+metrics = getMetrics(model, X_val, y_val,'withProbs')
 
 #Display Model Metrics
 displayMetrics(metrics)

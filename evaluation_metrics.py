@@ -12,7 +12,7 @@ Created on Mon Dec 28 18:43:16 2020
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_auc_score, f1_score, average_precision_score
 
 #Receives models inputs and the trained model, returns its metrics
-def getMetrics(model_type, model, x, y):
+def getMetrics(model, x, y, model_type=None):
     
     metrics=[]
     
