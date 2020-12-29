@@ -24,7 +24,7 @@ def getMetrics(model, x, y, model_type=None):
     metrics.append(f1_score(y,preds)) #get f1 score
     
     metrics.append(confusion_matrix(y, preds)) #get confusion matrix
-    
+
     metrics.append(precision_score(y, preds)) #get precision score
     
     metrics.append(recall_score(y, preds)) #get recall score

@@ -10,11 +10,14 @@ Created on Mon Dec 28 01:39:42 2020
 """
 
 import numpy as np
+from timeit import default_timer as timer
 from sklearn import svm
 from data_load import getDataset
 from evaluation_metrics import getMetrics
 
-#%% Load Datasets
+start = timer()
+
+#%% SVM
 
 languages = ['Native', 'English']
 numLanguages = len(languages)
@@ -23,6 +26,17 @@ numValues = 2   # Mean, Standard Deviation
 
 sMetrics_tr = np.zeros((numLanguages, numMetrics, numValues))
 sMetrics_val = np.zeros((numLanguages, numMetrics, numValues))
+
+# Define Parameters for Train
+
+C_ = 100
+kernel_ = 'rbf'
+gamma_ = 0.01
+
+print('SVM Model')
+print('C =', C_)
+print('kernel =', kernel_)
+print('gamma =', gamma_)
 
 for k, language in enumerate(languages):
     
@@ -35,7 +49,8 @@ for k, language in enumerate(languages):
         x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language)
         
         # Train SVM
-        model = svm.SVC(kernel = "linear")
+        
+        model = svm.SVC(C=C_, kernel=kernel_, gamma=gamma_)
         model.fit(x_tr, y_tr)
         
         # Assess *this* model
@@ -65,4 +80,6 @@ for k, language in enumerate(languages):
     print('Validation Set')
     print('Accuracy =', f'{sMetrics_val[k,0,0]:.3f}', '+/-',  f'{sMetrics_val[k,0,1]:.3f}')
     print('F1-Score =', f'{sMetrics_val[k,1,0]:.3f}', '+/-', f'{sMetrics_val[k,1,1]:.3f}\n')
-
+    
+end = timer()
+print(f'{end-start:.3f}', 's')
