@@ -18,16 +18,16 @@ from evaluation_metrics import getMetrics, displayMetrics
 #include a for loop with zip here
 number = 0
 language = "English"
-X_tr, y_tr, X_val, y_val, X_ts, y_ts = getSubset(number, language)
+x_tr, y_tr, x_val, y_val, x_ts, y_ts = getSubset(number, language)
 
 #%% Train Models
 
 model = svm.SVC(kernel = "poly")
-model.fit(X_tr, y_tr)
+model.fit(x_tr, y_tr)
 
 #%% Assess Performance
 
-score = model.score(X_val, y_val)
+score = model.score(x_val, y_val)
 print(score)
 
 #%%

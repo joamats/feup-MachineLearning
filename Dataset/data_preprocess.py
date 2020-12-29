@@ -13,6 +13,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from pickle_handling import createPickleFile, getPickleFile
+from collections import Counter
 
 #%% Definition of auxiliary functions, for data split (by key)
 
@@ -28,8 +29,8 @@ def train_val_test_split(X, tr_size=0.7):
 
 # Returns subsets with unique subjects in each train, validation, test
 def train_val_test_split_by_key(X, key, tr_size=0.6):
-    subsets = train_val_test_split(X[key].unique())
-    return [X.loc[X[key].isin(subset)] for subset in subsets]
+    subsets = train_val_test_split(np.unique(X[:,key]))
+    return [X[np.isin(X[:,key],subset)] for subset in subsets]
 
 #%% Definition of function that returns data split and pre-process
 # to be saved in pickle format
@@ -52,9 +53,11 @@ def getData():
     # get the id of subjects, from the path name
     names = np.char.split(rawData[1:,0], '_')
     nameN = np.zeros((data.shape[0]))
+    nameL = []
     
     for i, name in enumerate(names):
-        nameN[i] = name[2]
+        nameN[i] = name[2]    # person ID
+        nameL.append(name[3][1]) # audio language
         
     nameN = nameN.reshape((data.shape[0]),1)
     
@@ -71,7 +74,6 @@ def getData():
                 s[1] = g[1]
                 break
                     
-            
     # transform languages to numbers
     languages = np.unique(subjectsInfo[:,3])
     languages = languages.reshape((languages.shape[0],1))
@@ -94,76 +96,52 @@ def getData():
                 infos[i,:] = s[1:]
                 break
     
+    
     #%% Concatenation of info data, according to language
     
-    # empty lists initialization
-    languageversion = []
-    dataNativeLanguage = []
-    dataEnglish = []
+    data = np.concatenate((nameN, infos, data), axis=1)
     
+    # get number of features
+    numFeatures = data.shape[1]
     
-    # spearation of data language: english and native language
-    for i, name in enumerate(names):
-        languageversion.append(name[3]);
-        if(name[3][1] == 'V'):
-            dataNativeLanguage.append([nameN[i, 0], data[i,:], infos[i,:]])
+    # get number of language audios
+    c = Counter(nameL)
+    numEnglish = c['E']
+    numNative = c['V']
+    
+    dataNative = np.zeros((numNative, numFeatures))
+    dataEnglish = np.zeros((numEnglish, numFeatures))
+    
+    i_e = 0
+    i_n = 0
+    
+    for i, l in enumerate(nameL):
+        if l == 'E':
+            dataEnglish[i_e,:] = data[i,:]
+            i_e += 1
         else:
-            dataEnglish.append([nameN[i, 0], data[i,:], infos[i,:]])
-       
-    # conversion of lists to np.arrays 
-    dataEnglish = np.array(dataEnglish, dtype = object)
-    dataNativeLanguage = np.array(dataNativeLanguage, dtype = object)
-    
-    gE = [g[0] for g in dataEnglish[:,2]]
-    aE = [g[1] for g in dataEnglish[:,2]]
-    lE = [g[2] for g in dataEnglish[:,2]]
-    
-    
-    # conversion of np.arrays to pd.DataFrames
-    dfdataEnglish = pd.DataFrame({'ID': dataEnglish[:,0],
-                                  'Features': dataEnglish[:,1],
-                                  'Gender': gE,
-                                  'Age': aE,
-                                  'Language': lE
-                                 })
-    
-    gN = [g[0] for g in dataNativeLanguage[:,2]] # native genders
-    aN = [g[1] for g in dataNativeLanguage[:,2]] # native ages
-    lN = [g[2] for g in dataNativeLanguage[:,2]] # native
-    
-    dfdataNativeLanguage = pd.DataFrame({'ID': dataNativeLanguage[:,0],
-                                         'Features': dataNativeLanguage[:,1],
-                                         'Gender': gN,
-                                         'Age': aN,
-                                         'Language': lN
-                                         })
+            dataNative[i_n,:] = data[i,:]
+            i_n += 1
     
     #%% Split of dataset: training, validation, and test
     
+    # # 10 random datasets with nested hold out, for english and native languages
+    # # persons are not repeated in train, validation and test (unique by key)
     
-    # 10 random datasets with nested hold out, for english and native languages
-    # persons are not repeated in train, validation and test (unique by key)
-    
-    datasetsEnglish = []
-    datasetsNative = []
+    allDatasetsEnglish = []
+    allDatasetsNative = []
     
     # repeat shuffle process of data split 10x
     for i in range(10):
-        datasetsEnglish.append(train_val_test_split_by_key(dfdataEnglish, 'ID', tr_size=0.6))
-        datasetsNative.append(train_val_test_split_by_key(dfdataNativeLanguage, 'ID', tr_size=0.6))
-    
-    # with open('languages_correspondence.csv', 'wb') as f:
-    #     csv.writer(f).writerows(languages)
-    
-    # np.savetxt('languages_correspondence.csv', languages, delimiter=",")
-    # np.savetxt('genders_correspondence.csv', genders, delimiter=",")
+        allDatasetsEnglish.append(train_val_test_split_by_key(dataEnglish, 0, tr_size=0.6))
+        allDatasetsNative.append(train_val_test_split_by_key(dataNative, 0, tr_size=0.6))
 
-    return datasetsEnglish, datasetsNative
+    return allDatasetsEnglish, allDatasetsNative
 
 #%% Create pickle files with all necessary variables
 
-[datasetsEnglish, datasetsNative] = getData()
+[allDatasetsEnglish, allDatasetsNative] = getData()
 
 # create datasets in root
-createPickleFile(datasetsEnglish, '../datasetsEnglish')
-createPickleFile(datasetsNative, '../datasetsNative')
+createPickleFile(allDatasetsEnglish, '../datasetsEnglish')
+createPickleFile(allDatasetsNative, '../datasetsNative')
