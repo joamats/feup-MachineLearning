@@ -39,7 +39,7 @@ def getMetrics(model, x, y, model_type=None):
 #Displays all metrics
 def displayMetrics(metrics):
     
-    cm_display = ConfusionMatrixDisplay(confusion_matrix=metrics[2]).plot()
+    ConfusionMatrixDisplay(confusion_matrix=metrics[2]).plot()
     
     print('The Accuracy of the model was ', f'{metrics[0]:.3f}')
     print('The F1 Score of the model was ' , f'{metrics[1]:.3f}')
