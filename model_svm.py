@@ -12,7 +12,7 @@ Created on Mon Dec 28 01:39:42 2020
 import numpy as np
 from sklearn import svm
 from data_load import getDataset
-from evaluation_metrics import getMetrics, displayMetrics
+from evaluation_metrics import getMetrics
 
 #%% Load Datasets
 
@@ -21,11 +21,13 @@ numLanguages = len(languages)
 numMetrics = 3  # Accuracy, F1-score, Confusion Matrix
 numValues = 2   # Mean, Standard Deviation   
 
-allMetrics = np.zeros((numLanguages, numMetrics, numValues))
+sMetrics_tr = np.zeros((numLanguages, numMetrics, numValues))
+sMetrics_val = np.zeros((numLanguages, numMetrics, numValues))
 
 for k, language in enumerate(languages):
     
-    metrics = []
+    metrics_tr = []
+    metrics_val = []
     
     for number in range(10):
         
@@ -37,17 +39,30 @@ for k, language in enumerate(languages):
         model.fit(x_tr, y_tr)
         
         # Assess *this* model
-        metrics.append(getMetrics(model, x_val, y_val))
+        metrics_tr.append(getMetrics(model, x_tr, y_tr))
+        metrics_val.append(getMetrics(model, x_val, y_val))
         
     # Mean and Std for Accuracy    
-    allMetrics[k, 0, 0] = np.mean([r[0] for r in metrics])
-    allMetrics[k, 0, 1] = np.std([r[0] for r in metrics])
+    sMetrics_tr[k, 0, 0] = np.mean([r[0] for r in metrics_tr])
+    sMetrics_tr[k, 0, 1] = np.std([r[0] for r in metrics_tr])
     
     # Mean and Std for F1-score
-    allMetrics[k, 1, 0] = np.mean([r[1] for r in metrics])
-    allMetrics[k, 1, 1] = np.std([r[1] for r in metrics])
+    sMetrics_tr[k, 1, 0] = np.mean([r[1] for r in metrics_tr])
+    sMetrics_tr[k, 1, 1] = np.std([r[1] for r in metrics_tr])
     
-    print('Language:', language)
-    print('Accuracy =', f'{allMetrics[k,0,0]:.3f}', '+/-',  f'{allMetrics[k,0,1]:.3f}')
-    print('F1-Score =', f'{allMetrics[k,1,0]:.3f}', '+/-', f'{allMetrics[k,1,1]:.3f}\n')
+    # Mean and Std for Accuracy    
+    sMetrics_val[k, 0, 0] = np.mean([r[0] for r in metrics_val])
+    sMetrics_val[k, 0, 1] = np.std([r[0] for r in metrics_val])
+    
+    # Mean and Std for F1-score
+    sMetrics_val[k, 1, 0] = np.mean([r[1] for r in metrics_val])
+    sMetrics_val[k, 1, 1] = np.std([r[1] for r in metrics_val])
+    
+    print('\nLanguage:', language,'\n')
+    print('Training Set')
+    print('Accuracy =', f'{sMetrics_tr[k,0,0]:.3f}', '+/-',  f'{sMetrics_tr[k,0,1]:.3f}')
+    print('F1-Score =', f'{sMetrics_tr[k,1,0]:.3f}', '+/-', f'{sMetrics_tr[k,1,1]:.3f}\n')
+    print('Validation Set')
+    print('Accuracy =', f'{sMetrics_val[k,0,0]:.3f}', '+/-',  f'{sMetrics_val[k,0,1]:.3f}')
+    print('F1-Score =', f'{sMetrics_val[k,1,0]:.3f}', '+/-', f'{sMetrics_val[k,1,1]:.3f}\n')
 
