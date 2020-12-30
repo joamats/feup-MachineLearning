@@ -29,13 +29,13 @@ sMetrics_val = np.zeros((numLanguages, numMetrics, numValues))
 
 # Define Parameters for Train
 with_PCA_=True
-
 hidden_layer_sizes_=(50, 50, 50) #tentar 100 no meio
 activation_='relu'
 solver_='sgd'
 alpha_=0.0001
 learning_rate_='adaptive' #tentar constant
 max_iter_=300
+
 
 print('\nMLP Model \n')
 print('PCA selection: ', with_PCA_)
@@ -45,7 +45,7 @@ print('activation =', activation_)
 print('solver =', solver_)
 print('alpha =', alpha_)
 print('learning_rate =', learning_rate_)
-
+  
 for k, language in enumerate(languages):
     
     metrics_tr = []
