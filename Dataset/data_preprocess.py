@@ -70,7 +70,8 @@ def getData():
     for i, name in enumerate(names):
         nameN[i] = name[2]    # person ID
         nameL.append(name[3][1]) # audio language
-        
+        miu = np.mean(X, axis = 0)
+     normalized_features = (X - miu) / (np.sqrt(np.var(X, axis=0)))
     nameN = nameN.reshape((data.shape[0]),1)
     
     # transform genders to numbers
