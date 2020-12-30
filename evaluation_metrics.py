@@ -27,7 +27,7 @@ def getMetrics(model, x, y, model_type=None):
     
     metrics.append(recall_score(y, preds)) #get recall score
     
-    if (model_type=='withProbs'):
+    if (model_type == 'withProbs'):
         probs = model.predict_proba(x)[:,1] #get models probabilities
 
         metrics.append(roc_auc_score(y,probs)) #get roc auc 
