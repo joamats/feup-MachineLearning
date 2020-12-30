@@ -37,6 +37,7 @@ n_estimators_ = 200
 max_features_ = 'auto'
 max_depth_ = 10
 min_samples_leaf_ = 20
+bootstrap_=True
 with_PCA_=True
 
 print('\nRandom Forest Model \n')
@@ -45,6 +46,7 @@ print('n_estimators =', n_estimators_)
 print('max_features =', max_features_)
 print('max_depth =', max_depth_)
 print('min_samples_leaf =', min_samples_leaf_)
+print('bootstrap =', bootstrap_)
 
 for k, language in enumerate(languages):
     
@@ -57,7 +59,7 @@ for k, language in enumerate(languages):
         x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language, with_PCA=with_PCA_)
         
         # Train SVM
-        model = RandomForestClassifier(n_estimators=n_estimators_, max_features=max_features_, max_depth= max_depth_, min_samples_leaf=min_samples_leaf_, random_state=42).fit(x_tr, y_tr)
+        model = RandomForestClassifier(n_estimators=n_estimators_, max_features=max_features_, max_depth= max_depth_, min_samples_leaf=min_samples_leaf_, bootstrap = bootstrap_, random_state=42).fit(x_tr, y_tr)
         
         """
         Find best features to use in model:

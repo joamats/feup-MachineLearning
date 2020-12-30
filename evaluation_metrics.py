@@ -55,17 +55,17 @@ def getGeneralMetrics(metrics, numMetrics):
     
         sMetrics[metric, 0] = np.mean([r[metric] for r in metrics])
         sMetrics[metric, 1] = np.std([r[metric] for r in metrics])
-    
+        
     return sMetrics
 
 def displayGeneralMetrics(sMetrics):
     
     print('Accuracy =', f'{sMetrics[0,0]:.3f}', '+/-',  f'{sMetrics[0,1]:.3f}')
     print('F1-Score =', f'{sMetrics[1,0]:.3f}', '+/-', f'{sMetrics[1,1]:.3f}')
-    print('Precision Score =', f'{sMetrics[3,0]:.3f}', '+/-', f'{sMetrics[2,1]:.3f}')
-    print('Recall Score =', f'{sMetrics[4,0]:.3f}', '+/-', f'{sMetrics[3,1]:.3f}')
+    print('Precision Score =', f'{sMetrics[2,0]:.3f}', '+/-', f'{sMetrics[2,1]:.3f}')
+    print('Recall Score =', f'{sMetrics[3,0]:.3f}', '+/-', f'{sMetrics[3,1]:.3f}')
     
     if(len(sMetrics)==5):
-        print('AUROC =', f'{sMetrics[5,0]:.3f}', '+/-', f'{sMetrics[4,1]:.3f}')
+        print('AUROC =', f'{sMetrics[4,0]:.3f}', '+/-', f'{sMetrics[4,1]:.3f}')
     
     
