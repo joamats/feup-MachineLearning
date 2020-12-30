@@ -18,7 +18,6 @@ min_samples_leaf: Try setting this to values greater than one. This has a simila
 from evaluation_metrics import getMetrics, getGeneralMetrics, displayGeneralMetrics
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
-import pandas as pd
 from data_load import getDataset
 from sklearn.model_selection import GridSearchCV
 
@@ -26,7 +25,7 @@ from sklearn.model_selection import GridSearchCV
 
 languages = ['Native', 'English']
 numLanguages = len(languages)
-numMetrics = 6  
+numMetrics = 5 # Accuracy, F1-score, precision score, recall score, roc_auc  
 numValues = 2   # Mean, Standard Deviation
 
 sMetrics_tr = np.zeros((numLanguages, numMetrics, numValues))
