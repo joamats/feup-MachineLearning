@@ -24,7 +24,7 @@ start = timer()
 
 languages = ['Native', 'English']
 numLanguages = len(languages)
-numMetrics = 6  # Accuracy, F1-score, Confusion Matrix
+numMetrics = 5  # Accuracy, F1-score, Confusion Matrix
 numValues = 2   # Mean, Standard Deviation   
 
 sMetrics_tr = np.zeros((numLanguages, numMetrics, numValues))
@@ -53,7 +53,7 @@ for k, language in enumerate(languages):
     
     metrics_tr = []
     metrics_val = []
-    best_ = []
+    #best_ = []
 
     
     for number in range(10):
@@ -74,18 +74,7 @@ for k, language in enumerate(languages):
             model = svc
     
         model.fit(x_tr, y_tr)
-        
-        # # defining parameter range 
-        # param_grid = {'anova__k': np.arange(1,30,1)} 
-        
-        # grid = GridSearchCV(anova_svm, param_grid, cv = 5, refit = True, verbose = 2)
-        
-        # # fitting the model for grid search 
-        # grid.fit(x_tr, y_tr)
-        
-        # # save the best params
-        # best_.append(grid.best_params_)
-                
+                        
         # Assess *this* model
         metrics_tr.append(getMetrics(model, x_tr, y_tr, 'withProbs'))
         metrics_val.append(getMetrics(model, x_val, y_val, 'withProbs'))

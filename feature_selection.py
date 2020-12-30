@@ -5,7 +5,6 @@ Created on Wed Dec 30 01:10:02 2020
 @author: João Matos
 """
 
-from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import f_classif
 from matplotlib import pyplot

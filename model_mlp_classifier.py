@@ -20,7 +20,7 @@ from sklearn.neural_network import MLPClassifier
 
 languages = ['Native', 'English']
 numLanguages = len(languages)
-numMetrics = 6  
+numMetrics = 5
 numValues = 2   # Mean, Standard Deviation
 
 sMetrics_tr = np.zeros((numLanguages, numMetrics, numValues))
