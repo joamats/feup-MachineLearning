@@ -25,7 +25,7 @@ from sklearn.model_selection import GridSearchCV
 
 languages = ['Native', 'English']
 numLanguages = len(languages)
-numMetrics = 6  
+numMetrics = 5 # Accuracy, F1-score, precision score, recall score, roc_auc  
 numValues = 2   # Mean, Standard Deviation
 
 sMetrics_tr = np.zeros((numLanguages, numMetrics, numValues))

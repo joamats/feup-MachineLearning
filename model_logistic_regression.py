@@ -14,12 +14,14 @@ from data_load import getDataset
 from evaluation_metrics import getMetrics, getGeneralMetrics, displayGeneralMetrics
 import numpy as np
 from sklearn import preprocessing as pp
+
 metrics_tr = []
 metrics_val = []
 languages = ['Native', 'English']
 numLanguages = len(languages)
-numMetrics = 5 # Accuracy, F1-score, Confusion Matrix, precision score, recall score
-numValues = 2   # Mean, Standard Deviation   
+numMetrics = 5 # Accuracy, F1-score, precision score, recall score, roc_auc
+numValues = 2   # Mean, Standard Deviation 
+  
 for k, language in enumerate(languages):
     
     
@@ -42,8 +44,8 @@ for k, language in enumerate(languages):
 
        
         # Assess *this* model
-        metrics_tr.append(getMetrics(model, x_train_normalized, y_tr))
-        metrics_val.append(getMetrics(model, x_val_normalized, y_val))
+        metrics_tr.append(getMetrics(model, x_train_normalized, y_tr, 'withProbs'))
+        metrics_val.append(getMetrics(model, x_val_normalized, y_val, 'withProbs'))
 
     #get mean and std for each metric
     sMetrics_tr = getGeneralMetrics(metrics_tr, numMetrics)

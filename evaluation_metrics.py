@@ -23,8 +23,6 @@ def getMetrics(model, x, y, model_type=None):
     
     metrics.append(f1_score(y,preds)) #get f1 score
     
-    metrics.append(confusion_matrix(y, preds)) #get confusion matrix
-
     metrics.append(precision_score(y, preds)) #get precision score
     
     metrics.append(recall_score(y, preds)) #get recall score
@@ -39,16 +37,14 @@ def getMetrics(model, x, y, model_type=None):
 #Displays all metrics
 def displayMetrics(metrics):
     
-    ConfusionMatrixDisplay(confusion_matrix=metrics[2]).plot()
-    
     print('The Accuracy of the model was ', f'{metrics[0]:.3f}')
     print('The F1 Score of the model was ' , f'{metrics[1]:.3f}')
-    print('The Precision Score of the model was ', f'{metrics[3]:.3f}')
-    print('The Recall Score of the model was ' , f'{metrics[4]:.3f}')
+    print('The Precision Score of the model was ', f'{metrics[2]:.3f}')
+    print('The Recall Score of the model was ' , f'{metrics[3]:.3f}')
  
-    if(len(metrics)==6):
+    if(len(metrics)==5):
     
-        print('The Area under the ROC curve of the model was ' , f'{metrics[3]:.3f}')
+        print('The Area under the ROC curve of the model was ' , f'{metrics[4]:.3f}')
 
 def getGeneralMetrics(metrics, numMetrics):
     
@@ -66,10 +62,10 @@ def displayGeneralMetrics(sMetrics):
     
     print('Accuracy =', f'{sMetrics[0,0]:.3f}', '+/-',  f'{sMetrics[0,1]:.3f}')
     print('F1-Score =', f'{sMetrics[1,0]:.3f}', '+/-', f'{sMetrics[1,1]:.3f}')
-    print('Precision Score =', f'{sMetrics[3,0]:.3f}', '+/-', f'{sMetrics[3,1]:.3f}')
-    print('Recall Score =', f'{sMetrics[4,0]:.3f}', '+/-', f'{sMetrics[4,1]:.3f}')
+    print('Precision Score =', f'{sMetrics[3,0]:.3f}', '+/-', f'{sMetrics[2,1]:.3f}')
+    print('Recall Score =', f'{sMetrics[4,0]:.3f}', '+/-', f'{sMetrics[3,1]:.3f}')
     
-    if(len(sMetrics)==6):
-        print('AUROC =', f'{sMetrics[5,0]:.3f}', '+/-', f'{sMetrics[5,1]:.3f}')
+    if(len(sMetrics)==5):
+        print('AUROC =', f'{sMetrics[5,0]:.3f}', '+/-', f'{sMetrics[4,1]:.3f}')
     
     
