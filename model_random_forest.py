@@ -18,7 +18,6 @@ min_samples_leaf: Try setting this to values greater than one. This has a simila
 from evaluation_metrics import getMetrics, getGeneralMetrics, displayGeneralMetrics
 from sklearn.ensemble import RandomForestClassifier
 import numpy as np
-import pandas as pd
 from data_load import getDataset
 from sklearn.model_selection import GridSearchCV
 

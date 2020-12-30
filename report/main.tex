@@ -46,7 +46,9 @@ Maria Manuel Domingos Carvalho – up201706990\\
 
 \vspace{2mm}
 \textbf{ A. Feature Extraction }\par
-To train machine learning models to classify gender, age and identity, voice signal features can be used as the training set of these models. Taking into account the different features considered relevant in the literature [1,2] , a set of signal features were chosen and extracted from all the utterances in the database (Table 1). At first, each model was trained with the complete set of features and then the features used were adjusted to each model, to improve its performance. The pyAudioAnalysis (version 0.3.6) python library was used to extract all audio features.
+To train machine learning models to classify gender, age and identity, voice signal features can be used as the training set of these models. Taking into account the different features considered relevant in the literature [1,2] , a set of signal features were chosen and extracted from all the utterances in the database (Table 1). The pyAudioAnalysis (version 0.3.6) python library was used to extract all audio features.
+
+At first, each model was trained with the complete set of features. Then, to reduce the dimension of the dataset, remove redundant information and reduce running cost, Principal Component Analysis was applied, reducing the number of features from 136 to 35, by setting the desired explained variance to 99\% [3,4].
 
 \begin{center}
 \captionof{table}{List of all features extracted from voice signals.}
@@ -71,7 +73,10 @@ To train machine learning models to classify gender, age and identity, voice sig
 \end{center}
 
 \vspace{2mm}
-\textbf{ B. Defining Classification Groups }\par
+\textbf{ B. Feature Selection }\par
+
+\vspace{2mm}
+\textbf{ C. Defining Classification Groups }\par
 Explain how we divided age and identity groups and why we separated native vs English utterances. 
 
 \vspace{2mm}
@@ -101,5 +106,6 @@ Explain the 10 nested hold outs and why we did that.
 \textbf{V. References}\par
 [1]	O. Iloanusi et al., Voice Recognition and Gender Classification in the Context of Native Languages and Lingua Franca. 2019, pp. 175-179.\par
 [2] Rami S. Alkhawaldeh, "DGR: Gender Recognition of Human Speech Using One-Dimensional Conventional Neural Network", Scientific Programming, vol. 2019, 12 pages, 2019.
-
+[3] https://www.mikulskibartosz.name/pca-how-to-choose-the-number-of-components/
+[4] https://medium.com/datadriveninvestor/principal-component-analysis-pca-a0c5715bc9a2
 \end{document}
