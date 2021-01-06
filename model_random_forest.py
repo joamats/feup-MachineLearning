@@ -22,7 +22,7 @@ from data_load import getDataset
 from sklearn.model_selection import GridSearchCV
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.pipeline import make_pipeline
-
+from sklearn.decomposition import PCA
 
 #%% Load Datasets
 
@@ -41,18 +41,21 @@ max_features_ = 'auto'
 max_depth_ = 10
 min_samples_leaf_ = 20
 bootstrap_=True
-with_PCA_=True
 with_ANOVA_ = False
 k_features_ = 23
+with_PCA_= True
+PCA_variability_ = 0.95
 
 print('\nRandom Forest Model \n')
-print('PCA selection: ', with_PCA_)
 print('n_estimators =', n_estimators_)
 print('max_features =', max_features_)
 print('max_depth =', max_depth_)
 print('min_samples_leaf =', min_samples_leaf_)
 print('bootstrap =', bootstrap_)
-print('With ANOVA:', with_ANOVA_)
+print('PCA:', with_PCA_)
+if with_PCA_:
+    print('PCA variability:', PCA_variability_)
+print('ANOVA:', with_ANOVA_)
 if with_ANOVA_:
     print('k features:', k_features_)
   
@@ -65,22 +68,30 @@ for k, language in enumerate(languages):
     for number in range(10):
         
         # Get *this* dataset
-        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language, with_PCA=with_PCA_)
+        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language)
         
         # Train SVM
-        model = RandomForestClassifier(n_estimators=n_estimators_, max_features=max_features_, max_depth= max_depth_, min_samples_leaf=min_samples_leaf_, bootstrap = bootstrap_, random_state=42)
+        randForest = RandomForestClassifier(n_estimators=n_estimators_, max_features=max_features_, max_depth= max_depth_, min_samples_leaf=min_samples_leaf_, bootstrap = bootstrap_, random_state=42)
         
+        if with_PCA_:
+            #Create PCA to redimention features to have X % variability
+            pca = PCA(n_components=PCA_variability_, random_state=42)
         
-        if with_ANOVA_:
-            # ANOVA filter, take 3 best features
+            model = make_pipeline(pca, randForest)
+        
+        elif with_ANOVA_:
+        
+            #ANOVA filter, take 3 best features
             anova_filter = SelectKBest(f_classif, k=k_features_)
         
             # Make Pipeline
-            model = make_pipeline(anova_filter, model)
+            model = make_pipeline(anova_filter, randForest)
+        
         else:
-            model = model
+            model = randForest
             
         model.fit(x_tr, y_tr)
+        
         """
         #Find best features to use in model:
         rfc = RandomForestClassifier(n_jobs=-1,max_features= 'sqrt' ,n_estimators=50, oob_score = True) 

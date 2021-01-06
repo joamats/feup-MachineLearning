@@ -14,7 +14,9 @@ import numpy as np
 from data_load import getDataset
 from sklearn.model_selection import GridSearchCV
 from sklearn.neural_network import MLPClassifier
-
+from sklearn.pipeline import make_pipeline
+from sklearn.feature_selection import SelectKBest, f_classif
+from sklearn.decomposition import PCA
 
 #%% Load Datasets
 
@@ -28,13 +30,16 @@ sMetrics_val = np.zeros((numLanguages, numMetrics, numValues))
 
 
 # Define Parameters for Train
-with_PCA_=True
 hidden_layer_sizes_=(50, 50, 50) #tentar 100 no meio
 activation_='relu'
 solver_='sgd'
 alpha_=0.0001
 learning_rate_='adaptive' #tentar constant
 max_iter_=300
+with_ANOVA_ = False
+k_features_ = 23
+with_PCA_= True
+PCA_variability_ = 0.95
 
 
 print('\nMLP Model \n')
@@ -45,6 +50,12 @@ print('activation =', activation_)
 print('solver =', solver_)
 print('alpha =', alpha_)
 print('learning_rate =', learning_rate_)
+print('PCA:', with_PCA_)
+if with_PCA_:
+    print('PCA variability:', PCA_variability_)
+print('ANOVA:', with_ANOVA_)
+if with_ANOVA_:
+    print('k features:', k_features_)
   
 for k, language in enumerate(languages):
     
@@ -54,11 +65,30 @@ for k, language in enumerate(languages):
     for number in range(10):
         
         # Get *this* dataset
-        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language, with_PCA=with_PCA_)
+        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language)
         
         # Train SVM
-        model = MLPClassifier(hidden_layer_sizes= hidden_layer_sizes_, activation = activation_,  solver=solver_, alpha = alpha_, learning_rate = learning_rate_ , max_iter=max_iter_, random_state=42).fit(x_tr, y_tr)
+        mlpClass = MLPClassifier(hidden_layer_sizes= hidden_layer_sizes_, activation = activation_,  solver=solver_, alpha = alpha_, learning_rate = learning_rate_ , max_iter=max_iter_, random_state=42)
 
+
+        if with_PCA_:
+            #Create PCA to redimention features to have X % variability
+            pca = PCA(n_components=PCA_variability_, random_state=42)
+        
+            model = make_pipeline(pca, mlpClass)
+        
+        elif with_ANOVA_:
+        
+            #ANOVA filter, take 3 best features
+            anova_filter = SelectKBest(f_classif, k=k_features_)
+        
+            # Make Pipeline
+            model = make_pipeline(anova_filter, mlpClass)
+        
+        else:
+            model = mlpClass
+            
+        model.fit(x_tr, y_tr)
         """
         #Find best features to use in model:
         mlp = MLPClassifier(max_iter=300)

@@ -17,6 +17,7 @@ from evaluation_metrics import getMetrics, getGeneralMetrics, displayGeneralMetr
 from sklearn.model_selection import GridSearchCV
 from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.pipeline import make_pipeline
+from sklearn.decomposition import PCA
 
 start = timer()
 
@@ -36,16 +37,19 @@ probability_ = True
 C_ = 100
 kernel_ = 'rbf'
 gamma_ = 0.01
-with_PCA_= True
-with_ANOVA_ = True
+with_ANOVA_ = False
 k_features_ = 23
+with_PCA_= True
+PCA_variability_ = 0.95
 
 print('SVM Model')
 print('C =', C_)
 print('kernel =', kernel_)
 print('gamma =', gamma_)
-print('With PCA:', with_PCA_)
-print('With ANOVA:', with_ANOVA_)
+print('PCA:', with_PCA_)
+if with_PCA_:
+    print('PCA variability:', PCA_variability_)
+print('ANOVA:', with_ANOVA_)
 if with_ANOVA_:
     print('k features:', k_features_)
 
@@ -59,22 +63,30 @@ for k, language in enumerate(languages):
     for number in range(10):
         
         # Get *this* dataset
-        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language, with_PCA = with_PCA_)
+        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language)
         
         # SVM model
         svc = svm.SVC(probability=probability_, random_state=0, C=C_, kernel=kernel_, gamma=gamma_)
         
-        if with_ANOVA_:
-            # ANOVA filter, take 3 best features
+        if with_PCA_:
+            #Create PCA to redimention features to have X % variability
+            pca = PCA(n_components=PCA_variability_, random_state=42)
+        
+            model = make_pipeline(pca, svc)
+        
+        elif with_ANOVA_:
+        
+            #ANOVA filter, take 3 best features
             anova_filter = SelectKBest(f_classif, k=k_features_)
         
             # Make Pipeline
             model = make_pipeline(anova_filter, svc)
+        
         else:
             model = svc
     
         model.fit(x_tr, y_tr)
-                        
+        
         # Assess *this* model
         metrics_tr.append(getMetrics(model, x_tr, y_tr, 'withProbs'))
         metrics_val.append(getMetrics(model, x_val, y_val, 'withProbs'))
