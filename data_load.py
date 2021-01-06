@@ -15,29 +15,38 @@ import numpy as np
 #%% Definition of function to load data and return subset with tr, val, ts
 
 # receives number (from 0 to 9) and language("English" or "Native")
-# returns X and y for tr, val, ts
+# returns X and y for tr, val
 def getDataset(number, language):
     
     filename="datasets" + language
     
     allDatasets = getPickleFile(filename)
 
-    dataset = allDatasets[number]
+    trainDataset = allDatasets[0]
+    validationDataset = allDatasets[1]
     
     # train data
-    x_tr = dataset[0][:,4:]
-    y_tr = dataset[0][:,1]
+    x_tr = trainDataset[number][:,4:]
+    y_tr = trainDataset[number][:,1]
 
     # validation data
-    x_val = dataset[1][:,4:]
-    y_val = dataset[1][:,1]
+    x_val = validationDataset[number][:,4:]
+    y_val = validationDataset[number][:,1]
 
-    # test data
-    x_ts = dataset[2][:,4:]
-    y_ts = dataset[2][:,1]
         
-    return x_tr, y_tr, x_val, y_val, x_ts, y_ts
+    return x_tr, y_tr, x_val, y_val
 
+#%% returns X and y for ts
+
+def getTestDataset(language):
+     filename="datasets" + language    
+     allDatasets = getPickleFile(filename)
+     
+     # test data
+     x_ts = allDatasets[2][:,4:]
+     y_ts = allDatasets[2][:,1]
+     
+     return x_ts, y_ts
 #%% Definition of function to join datasets of both languages
 
 def getAllDataset(dataset_portion):

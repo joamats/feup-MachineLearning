@@ -18,19 +18,24 @@ from collections import Counter
 #%% Definition of auxiliary functions, for data split (by key)
 
 # Returns a list where 1st line = training, 2nd = validation, 3rd = test
-def train_val_test_split(X, tr_size=0.7):
-    tr, aux = train_test_split(X, train_size=tr_size, shuffle=True)
+def train_val_test_split(X):
+    
+     aux, ts = train_test_split(X, test_size=0.15, shuffle=True)
 
+     tr = []
+     val =[]
     # nested hold out
-    val, ts = train_test_split(aux, test_size=0.5, shuffle=True)
+     for i in range(10): # will return 10 sets of validation and train data
+        train, valid = train_test_split(aux, test_size = 0.18, shuffle=True)
+        tr.append(train)
+        val.append(valid)
     
-    
-    return [tr, val, ts] 
+     return [tr, val], ts
 
 # Returns subsets with unique subjects in each train, validation, test
-def train_val_test_split_by_key(X, key, tr_size=0.6):
-    subsets = train_val_test_split(np.unique(X[:,key]))
-    return [X[np.isin(X[:,key],subset)] for subset in subsets]
+def train_val_test_split_by_key(X, key):
+    subsetTV, subsets = train_val_test_split(np.unique(X[:,key]))
+    return [X[np.isin(X[:,key],subset)] for subset in subsetTV[0]], [X[np.isin(X[:,key],subset)] for subset in subsetTV[1]], X[np.isin(X[:,key],subsets)] 
 
 #%% Definition of function that returns data split and pre-process
 # to be saved in pickle format
@@ -130,18 +135,24 @@ def getData():
     
     allDatasetsEnglish = []
     allDatasetsNative = []
-    
+  
+    allDatasetsEnglish = train_val_test_split_by_key(dataEnglish, 0)
+    allDatasetsNative = train_val_test_split_by_key(dataNative, 0)
     # repeat shuffle process of data split 10x
-    for i in range(10):
-        allDatasetsEnglish.append(train_val_test_split_by_key(dataEnglish, 0, tr_size=0.6))
-        allDatasetsNative.append(train_val_test_split_by_key(dataNative, 0, tr_size=0.6))
+    
+    # for i in range(10):
+    #     allDatasetsEnglish.append(train_val_test_split_by_key(dataEnglish, 0, tr_size=0.6))
+    #     allDatasetsNative.append(train_val_test_split_by_key(dataNative, 0, tr_size=0.6))
 
     return allDatasetsEnglish, allDatasetsNative
+
+
+
 
 #%% Create pickle files with all necessary variables
 
 [allDatasetsEnglish, allDatasetsNative] = getData()
 
-# create datasets in root
-createPickleFile(allDatasetsEnglish, '../datasetsEnglish_PCA')
-createPickleFile(allDatasetsNative, '../datasetsNative_PCA')
+#create datasets in root
+createPickleFile(allDatasetsEnglish, '../datasetsEnglish')
+createPickleFile(allDatasetsNative, '../datasetsNative')

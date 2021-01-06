@@ -63,7 +63,7 @@ for k, language in enumerate(languages):
     for number in range(10):
         
         # Get *this* dataset
-        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language)
+        x_tr, y_tr, x_val, y_val = getDataset(number, language)
         
         # SVM model
         svc = svm.SVC(probability=probability_, random_state=0, C=C_, kernel=kernel_, gamma=gamma_)

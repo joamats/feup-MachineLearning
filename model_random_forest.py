@@ -68,7 +68,7 @@ for k, language in enumerate(languages):
     for number in range(10):
         
         # Get *this* dataset
-        x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language)
+        x_tr, y_tr, x_val, y_val = getDataset(number, language)
         
         # Train SVM
         randForest = RandomForestClassifier(n_estimators=n_estimators_, max_features=max_features_, max_depth= max_depth_, min_samples_leaf=min_samples_leaf_, bootstrap = bootstrap_, random_state=42)
