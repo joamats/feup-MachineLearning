@@ -40,7 +40,6 @@ for k, language in enumerate(languages):
         x_val_normalized = scaler.transform(x_val)
         
    
- 
         # Train Logistics Regression
         model = LogisticRegressionCV(Cs= 5, solver='newton-cg', random_state=0)
         model.fit(x_train_normalized, y_tr)
