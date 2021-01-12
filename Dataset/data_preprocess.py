@@ -138,21 +138,21 @@ def getData():
   
     allDatasetsEnglish = train_val_test_split_by_key(dataEnglish, 0)
     allDatasetsNative = train_val_test_split_by_key(dataNative, 0)
-    # repeat shuffle process of data split 10x
     
-    # for i in range(10):
-    #     allDatasetsEnglish.append(train_val_test_split_by_key(dataEnglish, 0, tr_size=0.6))
-    #     allDatasetsNative.append(train_val_test_split_by_key(dataNative, 0, tr_size=0.6))
-
-    return allDatasetsEnglish, allDatasetsNative
+    allDatasetsEnglishSubjectDependent = train_test_split(dataEnglish)
+    allDatasetsNativeSubjectDependent = train_test_split(dataNative)
+  
+    return allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent
 
 
 
 
 #%% Create pickle files with all necessary variables
 
-[allDatasetsEnglish, allDatasetsNative] = getData()
+[allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent] = getData()
 
 #create datasets in root
 createPickleFile(allDatasetsEnglish, '../datasetsEnglish')
 createPickleFile(allDatasetsNative, '../datasetsNative')
+createPickleFile(allDatasetsEnglishSubjectDependent, '../datasetsEnglishSubjectDependent')
+createPickleFile(allDatasetsNativeSubjectDependent, '../datasetsNativeSubjectDependent')

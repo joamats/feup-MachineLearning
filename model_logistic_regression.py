@@ -44,7 +44,8 @@ for k, language in enumerate(languages):
         
    
         # Train Logistics Regression
-        model = LogisticRegressionCV(Cs= 5, solver='newton-cg', random_state=0)
+        model = LogisticRegressionCV(Cs= 60, solver='newton-cg', random_state=0)
+    
         model.fit(x_train_normalized, y_tr)
        
         # Assess *this* model

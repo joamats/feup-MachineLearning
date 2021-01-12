@@ -32,7 +32,7 @@ def getMetrics(model, x, y, model_type=None):
 
         metrics.append(roc_auc_score(y,probs)) #get roc auc 
 
-    return metrics
+    return  metrics
 
 #%% Displays all metrics
 def displayMetrics(metrics):
