@@ -27,15 +27,14 @@ def getDataset(number, language):
     
     # train data
     x_tr = trainDataset[number][:,4:]
-    y_tr = trainDataset[number][:,1]
+    y_tr = trainDataset[number][:,1:3]
 
     # validation data
     x_val = validationDataset[number][:,4:]
-    y_val = validationDataset[number][:,1]
+    y_val = validationDataset[number][:,1:3]
 
         
     return x_tr, y_tr, x_val, y_val
-
 #%% returns X and y for ts
 
 def getTestDataset(language):

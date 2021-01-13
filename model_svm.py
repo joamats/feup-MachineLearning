@@ -65,6 +65,10 @@ for k, language in enumerate(languages):
         # Get *this* dataset
         x_tr, y_tr, x_val, y_val = getDataset(number, language)
         
+        #getting only the gender labels
+        y_tr = y_tr[:,0] 
+        y_val = y_val[:,0]
+        
         # SVM model
         svc = svm.SVC(probability=probability_, random_state=0, C=C_, kernel=kernel_, gamma=gamma_)
         

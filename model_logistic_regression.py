@@ -32,6 +32,9 @@ for k, language in enumerate(languages):
         # Get *this* dataset
         x_tr, y_tr, x_val, y_val = getDataset(number, language)
         
+        #getting only the gender labels
+        y_tr = y_tr[:,0] 
+        y_val = y_val[:,0]
         #normalizing the features
         scaler = pp.StandardScaler()
         scaler.fit(x_tr)
@@ -41,7 +44,8 @@ for k, language in enumerate(languages):
         
    
         # Train Logistics Regression
-        model = LogisticRegressionCV(Cs= 5, solver='newton-cg', random_state=0)
+        model = LogisticRegressionCV(Cs= 60, solver='newton-cg', random_state=0)
+    
         model.fit(x_train_normalized, y_tr)
        
         # Assess *this* model
