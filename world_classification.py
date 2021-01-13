@@ -13,7 +13,7 @@ from data_load import getAllDataset
 from sklearn.naive_bayes import GaussianNB
 
 #%% Get Dataset
-allData = getAllDataset("train")
+allData = getAllDataset("Test")
 
 #%% Define subject and get its data
 
