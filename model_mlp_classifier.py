@@ -67,6 +67,10 @@ for k, language in enumerate(languages):
         # Get *this* dataset
         x_tr, y_tr, x_val, y_val, x_ts, y_ts = getDataset(number, language)
         
+        #getting only the gender labels
+        y_tr = y_tr[:,0] 
+        y_val = y_val[:,0]
+        
         # Train SVM
         mlpClass = MLPClassifier(hidden_layer_sizes= hidden_layer_sizes_, activation = activation_,  solver=solver_, alpha = alpha_, learning_rate = learning_rate_ , max_iter=max_iter_, random_state=42)
 

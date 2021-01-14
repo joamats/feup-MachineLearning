@@ -16,9 +16,9 @@ import numpy as np
 
 # receives number (from 0 to 9) and language("English" or "Native")
 # returns X and y for tr, val
-def getDataset(number, language):
+def getDataset(number, language, mode):
     
-    filename="datasets" + language
+    filename="datasets" + language + mode
     
     allDatasets = getPickleFile(filename)
 
@@ -26,25 +26,24 @@ def getDataset(number, language):
     validationDataset = allDatasets[1]
     
     # train data
-    x_tr = trainDataset[number][:,4:]
-    y_tr = trainDataset[number][:,1]
+    x_tr = trainDataset[number][:,5:]
+    y_tr = trainDataset[number][:,:5]
 
     # validation data
-    x_val = validationDataset[number][:,4:]
-    y_val = validationDataset[number][:,1]
+    x_val = validationDataset[number][:,5:]
+    y_val = validationDataset[number][:,:5]
 
         
     return x_tr, y_tr, x_val, y_val
-
 #%% returns X and y for ts
 
-def getTestDataset(language):
-     filename="datasets" + language    
+def getTestDataset(language, mode):
+     filename="datasets" + language + mode     
      allDatasets = getPickleFile(filename)
      
      # test data
-     x_ts = allDatasets[2][:,4:]
-     y_ts = allDatasets[2][:,1]
+     x_ts = allDatasets[2][:,5:]
+     y_ts = allDatasets[2][:,:5]
      
      return x_ts, y_ts
 #%% Definition of function to join datasets of both languages
@@ -61,5 +60,5 @@ def getAllDataset(dataset_portion):
     else: 
         # test data
         allData = allData[1]
-     
+        
     return allData

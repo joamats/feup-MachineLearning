@@ -37,6 +37,12 @@ def train_val_test_split_by_key(X, key):
     subsetTV, subsets = train_val_test_split(np.unique(X[:,key]))
     return [X[np.isin(X[:,key],subset)] for subset in subsetTV[0]], [X[np.isin(X[:,key],subset)] for subset in subsetTV[1]], X[np.isin(X[:,key],subsets)] 
 
+# Returns subsets subject dependent in each train, validation, test
+def train_val_test_split_not_by_key(X):
+    subsetTV, subsets = train_val_test_split(X)
+    return subsetTV[0], subsetTV[1], subsets
+
+
 #%% Definition of function that returns data split and pre-process
 # to be saved in pickle format
 
@@ -119,14 +125,20 @@ def getData():
     
     i_e = 0
     i_n = 0
-    
+
     for i, l in enumerate(nameL):
         if l == 'E':
             dataEnglish[i_e,:] = data[i,:]
             i_e += 1
+            nameL[i] = 0 #transform nameL to 0 if english
         else:
             dataNative[i_n,:] = data[i,:]
             i_n += 1
+            nameL[i] = 1 #transform nameL to 1 if native
+        
+    nameL = np.array(nameL)  
+    nameL = nameL.reshape(nameL.shape[0],1)
+    data = np.concatenate((data[:,:4], nameL, data[:,4:]), axis=1).astype(float)
     
     #%% Split of dataset: training, validation, and test
     
@@ -138,21 +150,28 @@ def getData():
   
     allDatasetsEnglish = train_val_test_split_by_key(dataEnglish, 0)
     allDatasetsNative = train_val_test_split_by_key(dataNative, 0)
-    # repeat shuffle process of data split 10x
+    allDatasetsSubjectIndependent = train_val_test_split_by_key(data, 0)
     
-    # for i in range(10):
-    #     allDatasetsEnglish.append(train_val_test_split_by_key(dataEnglish, 0, tr_size=0.6))
-    #     allDatasetsNative.append(train_val_test_split_by_key(dataNative, 0, tr_size=0.6))
+    allDatasetsEnglishSubjectDependent = train_val_test_split_not_by_key(dataEnglish)
+    allDatasetsNativeSubjectDependent = train_val_test_split_not_by_key(dataNative)
+    allDatasetsSubjectDependent = train_val_test_split_not_by_key(data)
+    
 
-    return allDatasetsEnglish, allDatasetsNative
-
-
+    return allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent
 
 
 #%% Create pickle files with all necessary variables
 
-[allDatasetsEnglish, allDatasetsNative] = getData()
+
+[allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent] = getData()
 
 #create datasets in root
-createPickleFile(allDatasetsEnglish, '../datasetsEnglish')
-createPickleFile(allDatasetsNative, '../datasetsNative')
+createPickleFile(allDatasetsEnglish, '../datasetsEnglishSubjectIndependent')
+createPickleFile(allDatasetsNative, '../datasetsNativeSubjectIndependent')
+
+createPickleFile(allDatasetsEnglishSubjectDependent, '../datasetsEnglishSubjectDependent')
+createPickleFile(allDatasetsNativeSubjectDependent, '../datasetsNativeSubjectDependent')
+
+createPickleFile(allDatasetsSubjectDependent, '../datasetsSubjectDependent')
+createPickleFile(allDatasetsSubjectIndependent, '../datasetsSubjectIndependent')
+

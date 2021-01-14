@@ -12,7 +12,7 @@ Created on Mon Dec 28 18:43:16 2020
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_auc_score, f1_score, precision_score, recall_score
 import numpy as np
 
-#Receives models inputs and the trained model, returns its metrics
+#%% Receives models inputs and the trained model, returns its metrics
 def getMetrics(model, x, y, model_type=None):
     
     metrics=[]
@@ -32,9 +32,9 @@ def getMetrics(model, x, y, model_type=None):
 
         metrics.append(roc_auc_score(y,probs)) #get roc auc 
 
-    return metrics
+    return  metrics
 
-#Displays all metrics
+#%% Displays all metrics
 def displayMetrics(metrics):
     
     print('The Accuracy of the model was ', f'{metrics[0]:.3f}')
@@ -46,6 +46,7 @@ def displayMetrics(metrics):
     
         print('The Area under the ROC curve of the model was ' , f'{metrics[4]:.3f}')
 
+#%% 
 def getGeneralMetrics(metrics, numMetrics):
     
     sMetrics = np.zeros((numMetrics, 2))
@@ -58,6 +59,7 @@ def getGeneralMetrics(metrics, numMetrics):
         
     return sMetrics
 
+#%% 
 def displayGeneralMetrics(sMetrics):
     
     print('Accuracy =', f'{sMetrics[0,0]:.3f}', '+/-',  f'{sMetrics[0,1]:.3f}')
