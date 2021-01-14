@@ -21,8 +21,13 @@ from sklearn import preprocessing as pp
 from sklearn.linear_model import LogisticRegressionCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import confusion_matrix
+import seaborn as sn
+import pandas as pd
+import matplotlib.pyplot as plt
 
 #%% SVM models for Gender
+
 def genderSVM():
     
     # SVM Parameters
@@ -74,7 +79,7 @@ def genderLogReg():
     
     with_PCA_= False
     PCA_variability_ = 0.95
-    with_ANOVA_ = True
+    with_ANOVA_ = False
     k_features_ = 3
     
     # Pipelines
@@ -95,6 +100,7 @@ def genderLogReg():
     return model
 
 #%% Random Forest model for Gender
+
 def genderRandomForest():
     # RandomForest Parameters 
     n_estimators_ = 250
@@ -177,8 +183,7 @@ def genderMLPClassifier():
         model = mlpClass
     
     return model
-    
-    
+
 #%% Cross Validation for Train
 start = timer()
 
@@ -201,10 +206,10 @@ for number in range(10):
     y_val = y_val[:,1]
     y_TS = y_TS[:,1] #age
 
-    #model = genderSVM()
+    model = genderSVM()
     #model = genderLogReg()
     #model = genderRandomForest()
-    model = genderMLPClassifier()
+    #model = genderMLPClassifier()
     model.fit(x_tr, y_tr)
 
     # Assess *this* model
@@ -273,6 +278,13 @@ print('\nNative Results:')
 metrics = getMetrics(model, x_TS_native, y_TS_native, 'withProbs')
 displayMetrics(metrics)
 
-
+y_pred = model.predict(x_TS)
+c=confusion_matrix(y_TS, y_pred)
+df_cm = pd.DataFrame(c, range(2), range(2))
+# plt.figure(figsize=(10,7))
+sn.set(font_scale=1.4) # for label size
+sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
+ 
+plt.show()
 end = timer()
 print(f'{end-start:.3f}', 's')
