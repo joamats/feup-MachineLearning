@@ -18,6 +18,9 @@ from sklearn.pipeline import make_pipeline
 from sklearn.feature_selection import SelectKBest, f_classif
 from feature_selection import plot_score_features
 from sklearn import preprocessing as pp
+from sklearn.linear_model import LogisticRegressionCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
 
 #%% SVM models for Gender
 def genderSVM():
@@ -25,11 +28,11 @@ def genderSVM():
     # SVM Parameters
     probability_ = True
     C_ = 100
-    kernel_ = 'linear'
+    kernel_ = 'rbf'
     gamma_ = 0.01
-    with_PCA_= False
+    with_PCA_= True
     PCA_variability_ = 0.95
-    with_ANOVA_ = True
+    with_ANOVA_ = False
     k_features_ = 3
     
     # Create Model
@@ -60,21 +63,122 @@ def genderSVM():
 
 #%% Logistic Regression model for Gender
 
-def genderLogReg(x_tr, x_val, x_):
+def genderLogReg():
     #normalizing the features
     scaler = pp.StandardScaler()
-    scaler.fit(x_tr)
-    x_tr = scaler.transform(x_tr) 
-    
-    scaler.fit(x_val)
-    x_val = scaler.transform(x_val)
-    
-    scaler.fit(x_TS)
-    x_TS = scaler.transform(x_TS)
     
     # Train Logistics Regression
-    model = LogisticRegressionCV(Cs= 60, solver='newton-cg', random_state=0)
+    logReg = LogisticRegressionCV(Cs= 50, solver='newton-cg', random_state=42)
+    
+    model = make_pipeline(scaler, logReg)
+    
+    with_PCA_= False
+    PCA_variability_ = 0.95
+    with_ANOVA_ = True
+    k_features_ = 3
+    
+    # Pipelines
+    if with_PCA_:
+        #Create PCA to redimention features to have X % variability
+        pca = PCA(n_components=PCA_variability_, random_state=42)
+    
+        model = make_pipeline(pca, model)
+        
+    elif with_ANOVA_:
+    
+        #ANOVA filter, take best features
+        anova_filter = SelectKBest(f_classif, k=k_features_)
+    
+        # Make Pipeline
+        model = make_pipeline(anova_filter, model)
+    
+    return model
 
+#%% Random Forest model for Gender
+def genderRandomForest():
+    # RandomForest Parameters 
+    n_estimators_ = 250
+    max_features_ = 'auto'
+    max_depth_ = 10
+    min_samples_leaf_ = 20
+    bootstrap_=True
+    with_ANOVA_ = False
+    k_features_ = 3
+    with_PCA_= False
+    PCA_variability_ = 0.95
+    
+    randForest = RandomForestClassifier(n_estimators=n_estimators_,
+                                        max_features=max_features_,
+                                        max_depth= max_depth_,
+                                        min_samples_leaf=min_samples_leaf_,
+                                        bootstrap = bootstrap_,
+                                        random_state=42)
+        
+    if with_PCA_:
+            #Create PCA to redimention features to have X % variability
+            pca = PCA(n_components=PCA_variability_, random_state=42)
+        
+            model = make_pipeline(pca, randForest)
+        
+    elif with_ANOVA_:
+    
+        #ANOVA filter, take 3 best features
+        anova_filter = SelectKBest(f_classif, k=k_features_)
+    
+        # Make Pipeline
+        model = make_pipeline(anova_filter, randForest)
+    
+    else:
+        model = randForest
+        
+    return model
+
+#%% MLP Classifier for Gender
+
+def genderMLPClassifier():
+    # Parameters for MLP classifier
+    hidden_layer_sizes_=(100)
+    activation_='relu'
+    solver_='sgd'
+    alpha_=.01
+    learning_rate_='adaptive'
+    early_stopping_ = True
+    max_iter_=500
+    with_ANOVA_ = False
+    k_features_ = 3
+    with_PCA_= False
+    PCA_variability_ = 0.95
+    
+    mlpClass = MLPClassifier(hidden_layer_sizes= hidden_layer_sizes_, 
+                             activation = activation_,  
+                             solver=solver_, 
+                             alpha = alpha_, 
+                             learning_rate = learning_rate_ , 
+                             max_iter=max_iter_, 
+                             early_stopping = early_stopping_,
+                             random_state=42)
+
+
+    if with_PCA_:
+        #Create PCA to redimention features to have X % variability
+        pca = PCA(n_components=PCA_variability_, random_state=42)
+    
+        model = make_pipeline(pca, mlpClass)
+    
+    elif with_ANOVA_:
+    
+        #ANOVA filter, take 3 best features
+        anova_filter = SelectKBest(f_classif, k=k_features_)
+    
+        # Make Pipeline
+        model = make_pipeline(anova_filter, mlpClass)
+    
+    else:
+        model = mlpClass
+    
+    return model
+    
+    
 #%% Cross Validation for Train
 start = timer()
 
@@ -85,7 +189,7 @@ metrics_val = []
 for number in range(10):
 
     language = ''
-    mode = 'SubjectIndependent'
+    mode = 'SubjectDependent'
     x_tr, y_tr, x_val, y_val,  = getDataset(number, language, mode)
     x_TS, y_TS = getTestDataset(language, mode)
     
@@ -97,7 +201,10 @@ for number in range(10):
     y_val = y_val[:,1]
     y_TS = y_TS[:,1] #age
 
-    model = genderSVM()
+    #model = genderSVM()
+    #model = genderLogReg()
+    #model = genderRandomForest()
+    model = genderMLPClassifier()
     model.fit(x_tr, y_tr)
 
     # Assess *this* model
