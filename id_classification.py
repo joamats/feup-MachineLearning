@@ -48,9 +48,6 @@ def worldClassification(allData,pool_Ids,subject_audio, thresh):
         probs.append(model.predict_proba(subject_audio[:,4:]))
 
     for i in range(pool_Ids.shape[0]):
-        if(probs[i][0].shape[0])==1: #REMOVE
-            print(probs)
-            print(pool_Ids[i])
         if probs[i][:,1]>thresh:
             return pool_Ids[i]
         
