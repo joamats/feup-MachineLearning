@@ -162,7 +162,6 @@ def getData():
 
 #%% Create pickle files with all necessary variables
 
-
 [allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent] = getData()
 
 #create datasets in root

@@ -72,20 +72,22 @@ for k, language in enumerate(languages):
         # Assess *this* model
         preds = getMetrics(model, x_tr, y_train)
         predsval = getMetrics(model, x_val, y_validation)
-        metrics_tr.append(a)
-        metrics_val.append(b)
+
+    #     metrics_tr.append(a)
+    #     metrics_val.append(b)
         
 
-    #get mean and std for each metric
-    sMetrics_tr = getGeneralMetrics(metrics_tr, numMetrics)
-    sMetrics_val = getGeneralMetrics(metrics_val, numMetrics)
+    # #get mean and std for each metric
+    # sMetrics_tr = getGeneralMetrics(metrics_tr, numMetrics)
+    # sMetrics_val = getGeneralMetrics(metrics_val, numMetrics)
 
-    print('\nLanguage:', language,'\n')
-    print('Training Set')
-    displayGeneralMetrics(sMetrics_tr)
-    print('\n')
-    print('Validation Set')
-    displayGeneralMetrics(sMetrics_val)
-    print('\n')
+    # print('\nLanguage:', language,'\n')
+    # print('Training Set')
+    # displayGeneralMetrics(sMetrics_tr)
+    # print('\n')
+    # print('Validation Set')
+    # displayGeneralMetrics(sMetrics_val)
+    # print('\n')
+
     
     
