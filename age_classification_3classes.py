@@ -42,7 +42,9 @@ numValues = 2   # Mean, Standard Deviation
 mode= 'SubjectIndependent'
 if (withGenderSeparation):
  genders =  ['Male', 'Female']
-
+ 
+ 
+# cross validation for train
  for k, gender in enumerate(genders): 
     for number in range(10):
              
@@ -114,7 +116,7 @@ else:
         metrics_tr.append(getMetrics(model, x_training, age_training, None, 'Multiclass'))
         metrics_val.append(getMetrics(model, x_val, ageLabelval , None, 'Multiclass'))
 
-#get mean and std for each metric
+# #get mean and std for each metric
 sMetrics_tr = getGeneralMetrics(metrics_tr, numMetrics)
 sMetrics_val = getGeneralMetrics(metrics_val, numMetrics)
 
@@ -125,8 +127,15 @@ print('Validation Set')
 displayGeneralMetrics(sMetrics_val)
 print('\n')      
 print('Testing Set')
+
+#Final model and test
+x_TR = np.concatenate((x_training,x_validation), axis=0)
+y_TR = np.concatenate((age_training, age_validation), axis=0)
+model.fit(x_TR, y_TR)
 metrics = getMetrics(model, x_ts, y_ts, None, 'Multiclass')
 displayMetrics(metrics)
+
+
 
 #Confusion matrix
 y_TS = y_ts.reshape(y_ts.shape[0],1).astype(float)
