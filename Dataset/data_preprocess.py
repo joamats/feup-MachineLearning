@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Dec 27 01:41:21 2020
-
 @authors:
     João Matos
     Maria Loureiro
@@ -139,8 +138,7 @@ def getData():
     nameL = np.array(nameL)  
     nameL = nameL.reshape(nameL.shape[0],1)
     data = np.concatenate((data[:,:4], nameL, data[:,4:]), axis=1).astype(float)
-    
-    #%% Concatenation of info data, according to gender
+   #%% Concatenation of info data, according to gender
     
     # get number of features
     numFeatures = data.shape[1]
@@ -156,7 +154,8 @@ def getData():
         
     maleData = np.array(maleData)  
     femaleData = np.array(femaleData)
-       
+    
+    
     #%% Split of dataset: training, validation, and test
     
     # # 10 random datasets with nested hold out, for english and native languages
@@ -169,23 +168,21 @@ def getData():
     allDatasetsNative = train_val_test_split_by_key(dataNative, 0)
     allDatasetsSubjectIndependent = train_val_test_split_by_key(data, 0)
     
+    allDatasetsEnglishSubjectDependent = train_val_test_split_not_by_key(dataEnglish)
+    allDatasetsNativeSubjectDependent = train_val_test_split_not_by_key(dataNative)
+    allDatasetsSubjectDependent = train_val_test_split_not_by_key(data)
+    
     maleDataSubjectIndependent = train_val_test_split_by_key(maleData, 0)
     maleDataSubjectDependent = train_val_test_split_not_by_key(maleData)
     femaleDataSubjectIndependent = train_val_test_split_by_key(femaleData, 0)
     femaleDataSubjectDependent = train_val_test_split_not_by_key(femaleData)
     
-    
-    allDatasetsEnglishSubjectDependent = train_val_test_split_not_by_key(dataEnglish)
-    allDatasetsNativeSubjectDependent = train_val_test_split_not_by_key(dataNative)
-    allDatasetsSubjectDependent = train_val_test_split_not_by_key(data)
-    
-
-    return allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent,maleDataSubjectDependent, maleDataSubjectIndependent, femaleDataSubjectDependent, femaleDataSubjectIndependent
+    return allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent, maleDataSubjectDependent,maleDataSubjectIndependent,femaleDataSubjectDependent, femaleDataSubjectIndependent
 
 
 #%% Create pickle files with all necessary variables
 
-[allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent, maleDataSubjectDependent, maleDataSubjectIndependent, femaleDataSubjectDependent, femaleDataSubjectIndependent] = getData()
+[allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent, maleDataSubjectDependent,maleDataSubjectIndependent,femaleDataSubjectDependent, femaleDataSubjectIndependent] = getData()
 
 #create datasets in root
 createPickleFile(allDatasetsEnglish, '../datasetsEnglishSubjectIndependent')

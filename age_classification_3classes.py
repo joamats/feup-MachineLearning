@@ -4,20 +4,13 @@ Created on Sat Jan  9 12:52:46 2021
 
 @author: User
 """
-from sklearn.linear_model import LogisticRegressionCV
+
 from data_load import getDataset, getTestDataset
 from evaluation_metrics import getMetrics, getGeneralMetrics, displayGeneralMetrics, displayMetrics
 import numpy as np
 from sklearn import svm
-from sklearn import preprocessing as pp
 from imblearn.over_sampling import SMOTE
-from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
-from sklearn.pipeline import make_pipeline
-from sklearn.decomposition import PCA
-from feature_selection import select_features,  plot_score_features
-from sklearn.feature_selection import SelectKBest, f_classif
-from sklearn.utils.class_weight import compute_sample_weight
 from sklearn.metrics import confusion_matrix
 import pandas as pd
 import seaborn as sn

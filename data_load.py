@@ -58,10 +58,9 @@ def getAllDataset(dataset_portion):
     if dataset_portion == "train":
         # train data
         allData = allData[0]
-        x= allData[:,4:]
-        y = allData[:,2]
+       
     else: 
         # test data
         allData = allData[1]
         
-    return x,y
+    return allData
