@@ -12,7 +12,7 @@ import numpy as np
 from data_load import getAllDataset
 from sklearn.naive_bayes import GaussianNB
 
-def worldClassification(allData,pool_Ids,subject_audio, thresh):
+def identityClassification(open_set,allData,pool_Ids,subject_audio, thresh=''):
     
     # Get pool of audios
     audio_pool = []
@@ -41,45 +41,66 @@ def worldClassification(allData,pool_Ids,subject_audio, thresh):
         gauss = GaussianNB()
         models.append(gauss.fit(audio_pool[:,4:], y))
         
-    probs=[]
+    
+    probs= np.zeros((pool_Ids.shape[0],2))
+    
     # Get scores for each model regarding subject in analysis
     for i in range(pool_Ids.shape[0]):
         model=models[i]
-        probs.append(model.predict_proba(subject_audio[:,4:]))
-
-    for i in range(pool_Ids.shape[0]):
-        if probs[i][:,1]>thresh:
-            return pool_Ids[i]
-        
-    return 0
+        prob=model.predict_proba(subject_audio[:,4:])[0]
+        if prob.shape[0]==1:
+            return 0
+        probs[i,0]=prob[0]
+        probs[i,1]=prob[1]
+    
+    if open_set:
+        for i in range(pool_Ids.shape[0]):
+            if probs[i,1]>thresh:
+                return pool_Ids[i]
+        return 0
+    
+    else:
+        max_index = np.where(probs[:,1] == np.amax(probs[:,1]))
+        if(len(max_index[0])!=1): #if two IDs have maximum probability, it is considered wrong
+            return 0
+        return pool_Ids[max_index]
+    
 
     
 #%% Get Dataset
+
 allData = getAllDataset("Test")
 
+# Define type of classification
+open_set=False #if false, closed set will be performed
+if open_set:
+    print("OPEN-SET CLASSIFICATION \n")
+else:
+    print("CLOSED-SET CLASSIFICATION \n")
+    
 # Define number of tests
 n_tests = 100
-print('The classification will be tested ', n_tests, ' times. \n')
+print('The classification will be tested ', n_tests, ' times\n')
 
 # Define number of subjects that will integrate the pool
-numSubjects = 100
-print('The number of subjects in the pool is ', numSubjects, '. \n')
+numSubjects = 10
+print('The number of subjects in the pool is ', numSubjects, '\n')
 
 # Define if text is audio dependent or not
 audio_independent = False
-print('Audio independency: ', audio_independent, '. \n')
+print('Audio independency: ', audio_independent, '\n')
 
-# Define probability threshold
-thresh=0.7
-print('The subject will be considered identified if its probability is above ', thresh, '. \n')
+if open_set:
+    # Define probability threshold
+    thresh=0.7
+    print('The subject will be considered identified if its probability is above ', thresh, '. \n')
 
 scores=0
-
 for i in range(n_tests):
     
     # Define subject and get its data
     
-    #ALTERNATIVE 1: Choose random identity from the dataset
+    # Choose random identity from the dataset
     subject_Id = np.random.choice(allData[:,0],1)
     
     # Get subjects data
@@ -87,28 +108,34 @@ for i in range(n_tests):
     index=np.random.choice(audio_indexes[0],1)
     subject_audio = allData[index,:]
     subject_audio = np.array(subject_audio).astype(np.float)
+    
     # Remove audio from dataset
     if audio_independent:
         allData = np.delete(allData, (index), axis=0)
     
     # Define pool of subjects in analysis
     
-    # ALTERNATIVE 1: Randomly define subjects that will integrate the pool
+    # Randomly define subjects that will integrate the pool
     all_Ids = np.unique(allData[:,0])
+    # Remove ID from dataset (will after be added)
+    id_index = np.where(all_Ids == subject_Id)
+    all_Ids = np.delete(all_Ids, (id_index), axis=0)
     np.random.shuffle(all_Ids)
     pool_Ids = all_Ids[0:numSubjects-1]
     
-    # Closed Set Classification
+    # Add ID of subject in analysis
     pool_Ids=np.append(pool_Ids,subject_Id)
     np.random.shuffle(pool_Ids)
 
     # Identify Subject
-    identified_Id = worldClassification(allData,pool_Ids,subject_audio, thresh)
+    if open_set:
+        identified_Id = identityClassification(open_set,allData,pool_Ids,subject_audio, thresh)
+    else:
+        identified_Id = identityClassification(open_set,allData,pool_Ids,subject_audio)
     
     # Evaluation
     if int(float(identified_Id)) == int(float(subject_Id)):
-        scores=scores+1
-    
+        scores=scores+1    
 
 #%% Display Results
 
