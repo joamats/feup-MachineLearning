@@ -9,7 +9,7 @@ Created on Mon Dec 28 18:43:16 2020
     
 """
 
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_auc_score, f1_score, precision_score, recall_score
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_auc_score, f1_score, precision_score, recall_score, balanced_accuracy_score
 import numpy as np
 
 #%% Receives models inputs and the trained model, returns its metrics
@@ -38,6 +38,7 @@ def getMetrics(model, x, y, model_type=None, class_problem = 'Binary'):
     
         metrics.append(recall_score(y, preds, average='weighted')) #get recall score
     
+        metrics.append(balanced_accuracy_score(y, preds)) #get balanced accuracy
     if (model_type == 'withProbs'):
         probs = model.predict_proba(x)[:,1] #get models probabilities
 
@@ -46,17 +47,20 @@ def getMetrics(model, x, y, model_type=None, class_problem = 'Binary'):
     return  metrics
 
 #%% Displays all metrics
-def displayMetrics(metrics):
+def displayMetrics(metrics, class_problem = 'Binary'):
     
     print('The Accuracy of the model was ', f'{metrics[0]:.3f}')
     print('The F1 Score of the model was ' , f'{metrics[1]:.3f}')
     print('The Precision Score of the model was ', f'{metrics[2]:.3f}')
     print('The Recall Score of the model was ' , f'{metrics[3]:.3f}')
- 
-    if(len(metrics)==5):
+
+    if class_problem == 'Binary':
+      if(len(metrics)==5):
     
         print('The Area under the ROC curve of the model was ' , f'{metrics[4]:.3f}')
-
+    else: 
+        print('The balanced accuracy of the model was ' , f'{metrics[4]:.3f}')
+    
 #%% 
 def getGeneralMetrics(metrics, numMetrics):
     
@@ -71,14 +75,17 @@ def getGeneralMetrics(metrics, numMetrics):
     return sMetrics
 
 #%% 
-def displayGeneralMetrics(sMetrics):
+def displayGeneralMetrics(sMetrics, class_problem='Binary'):
     
     print('Accuracy =', f'{sMetrics[0,0]:.3f}', '+/-',  f'{sMetrics[0,1]:.3f}')
     print('F1-Score =', f'{sMetrics[1,0]:.3f}', '+/-', f'{sMetrics[1,1]:.3f}')
     print('Precision Score =', f'{sMetrics[2,0]:.3f}', '+/-', f'{sMetrics[2,1]:.3f}')
     print('Recall Score =', f'{sMetrics[3,0]:.3f}', '+/-', f'{sMetrics[3,1]:.3f}')
     
-    if(len(sMetrics)==5):
+    if class_problem == 'Binary':
+     if(len(sMetrics)==5):
         print('AUROC =', f'{sMetrics[4,0]:.3f}', '+/-', f'{sMetrics[4,1]:.3f}')
+    else: 
+        print('Balanced Accuracy =', f'{sMetrics[4,0]:.3f}', '+/-', f'{sMetrics[4,1]:.3f}')
     
     

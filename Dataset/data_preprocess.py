@@ -161,15 +161,7 @@ def getData():
     # # 10 random datasets with nested hold out, for english and native languages
     # # persons are not repeated in train, validation and test (unique by key)
     
-    allDatasetsEnglish = []
-    allDatasetsNative = []
-  
-    allDatasetsEnglish = train_val_test_split_by_key(dataEnglish, 0)
-    allDatasetsNative = train_val_test_split_by_key(dataNative, 0)
     allDatasetsSubjectIndependent = train_val_test_split_by_key(data, 0)
-    
-    allDatasetsEnglishSubjectDependent = train_val_test_split_not_by_key(dataEnglish)
-    allDatasetsNativeSubjectDependent = train_val_test_split_not_by_key(dataNative)
     allDatasetsSubjectDependent = train_val_test_split_not_by_key(data)
     
     maleDataSubjectIndependent = train_val_test_split_by_key(maleData, 0)
@@ -177,19 +169,14 @@ def getData():
     femaleDataSubjectIndependent = train_val_test_split_by_key(femaleData, 0)
     femaleDataSubjectDependent = train_val_test_split_not_by_key(femaleData)
     
-    return allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent, maleDataSubjectDependent,maleDataSubjectIndependent,femaleDataSubjectDependent, femaleDataSubjectIndependent
+    return allDatasetsSubjectDependent, allDatasetsSubjectIndependent, maleDataSubjectDependent,maleDataSubjectIndependent,femaleDataSubjectDependent, femaleDataSubjectIndependent
 
 
 #%% Create pickle files with all necessary variables
 
-[allDatasetsEnglish, allDatasetsNative, allDatasetsEnglishSubjectDependent, allDatasetsNativeSubjectDependent, allDatasetsSubjectDependent, allDatasetsSubjectIndependent, maleDataSubjectDependent,maleDataSubjectIndependent,femaleDataSubjectDependent, femaleDataSubjectIndependent] = getData()
+[allDatasetsSubjectDependent, allDatasetsSubjectIndependent, maleDataSubjectDependent,maleDataSubjectIndependent,femaleDataSubjectDependent, femaleDataSubjectIndependent] = getData()
 
 #create datasets in root
-createPickleFile(allDatasetsEnglish, '../datasetsEnglishSubjectIndependent')
-createPickleFile(allDatasetsNative, '../datasetsNativeSubjectIndependent')
-
-createPickleFile(allDatasetsEnglishSubjectDependent, '../datasetsEnglishSubjectDependent')
-createPickleFile(allDatasetsNativeSubjectDependent, '../datasetsNativeSubjectDependent')
 
 createPickleFile(allDatasetsSubjectDependent, '../datasetsSubjectDependent')
 createPickleFile(allDatasetsSubjectIndependent, '../datasetsSubjectIndependent')
