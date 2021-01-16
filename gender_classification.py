@@ -33,7 +33,7 @@ def genderSVM():
     # SVM Parameters
     probability_ = True
     C_ = 100
-    kernel_ = 'rbf'
+    kernel_ = 'linear'
     gamma_ = 0.01
     with_PCA_= True
     PCA_variability_ = 0.95
@@ -206,6 +206,11 @@ for number in range(10):
     y_val = y_val[:,1]
     y_TS = y_TS[:,1] #age
 
+<<<<<<< HEAD
+    #model = genderSVM()
+    #model = genderLogReg()
+    model = genderRandomForest()
+=======
 
     #model = genderSVM()
     model = genderLogReg()
@@ -213,6 +218,7 @@ for number in range(10):
     #model = genderLogReg()
 
     #model = genderRandomForest()
+>>>>>>> 4d6d2d2480d8d8bda6e4e85f8de958ee91d55ddc
     #model = genderMLPClassifier()
     model.fit(x_tr, y_tr)
 
@@ -285,10 +291,12 @@ displayMetrics(metrics)
 y_pred = model.predict(x_TS)
 c=confusion_matrix(y_TS, y_pred)
 df_cm = pd.DataFrame(c, range(2), range(2))
-# plt.figure(figsize=(10,7))
 sn.set(font_scale=1.4) # for label size
-sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}) # font size
+sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}, cmap="YlGnBu") # font size
  
+plt.xlabel("Predicted Classes")
+plt.ylabel("Actual Classes")
+plt.title("Confusion Matrix - Random Forest, Subject-Dependent")
 plt.show()
 end = timer()
 print(f'{end-start:.3f}', 's')

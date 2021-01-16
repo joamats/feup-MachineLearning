@@ -119,7 +119,7 @@ y_TR = np.concatenate((y_tr,y_val), axis=0)
 lanEnglish_TR = np.concatenate((lanEnglish_tr,lanEnglish_val), axis=0)
 
 sample_weight = compute_sample_weight("balanced", y_TR)
-reg.fit(x_TR, y_TR, sample_weight)
+reg.fit(x_TR, y_TR)#, sample_weight)
 
 pred_TR = reg.predict(x_TR)
 
@@ -224,7 +224,7 @@ df_cm = pd.DataFrame(c, [s for s in np.unique(y_TS).astype(int)], [s for s in np
 sn.set(font_scale=1.1) # for label size
 sn.heatmap(df_cm, annot=True, annot_kws={"size": 10}, cmap="YlGnBu") # font size
 
-plt.title("Confusion Matrix of Age Ridge Regression with Costs")
+plt.title("Confusion Matrix of Age Ridge Regression")
 plt.xlabel("Predicted Ages", fontsize=10)
 plt.ylabel("Actual Ages", fontsize=10)
  
@@ -239,7 +239,7 @@ df_cm = pd.DataFrame(c, [s for s in np.unique(y_TS_classes).astype(int)], [s for
 sn.set(font_scale=1.1) # for label size
 sn.heatmap(df_cm, annot=True, annot_kws={"size": 10}, cmap="YlGnBu") # font size
 
-plt.title("Confusion Matrix of final Age Classification")
+plt.title("Confusion Matrix of final Age Classification, with Costs")
 plt.xlabel("Predicted Classes", fontsize=10)
 plt.ylabel("Actual Classes", fontsize=10)
  
