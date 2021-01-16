@@ -286,7 +286,7 @@ sn.heatmap(df_cm, annot=True, annot_kws={"size": 16}, cmap="YlGnBu") # font size
  
 plt.xlabel("Predicted Classes")
 plt.ylabel("Actual Classes")
-plt.title("Confusion Matrix - Random Forest, Subject-Independent")
+plt.title("Confusion Matrix - Random Forest, Subject-Dependent")
 plt.show()
 end = timer()
 print(f'{end-start:.3f}', 's')
