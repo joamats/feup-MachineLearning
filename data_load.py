@@ -16,9 +16,9 @@ import numpy as np
 
 # receives number (from 0 to 9) and language("English" or "Native")
 # returns X and y for tr, val
-def getDataset(number, language, mode):
+def getDataset(number, language, mode, gender=''):
     
-    filename="datasets" + language + mode
+    filename="datasets" + language + gender + mode
     
     allDatasets = getPickleFile(filename)
 
@@ -38,8 +38,8 @@ def getDataset(number, language, mode):
     return x_tr, y_tr, x_val, y_val
 #%% returns X and y for ts
 
-def getTestDataset(language, mode):
-     filename="datasets" + language + mode     
+def getTestDataset(language, mode, gender=''):
+     filename="datasets" + language + gender + mode     
      allDatasets = getPickleFile(filename)
      
      # test data
@@ -58,6 +58,7 @@ def getAllDataset(dataset_portion):
     if dataset_portion == "train":
         # train data
         allData = allData[0]
+       
     else: 
         # test data
         allData = allData[1]

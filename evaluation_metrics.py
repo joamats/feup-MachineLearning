@@ -13,19 +13,30 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_auc_sc
 import numpy as np
 
 #%% Receives models inputs and the trained model, returns its metrics
-def getMetrics(model, x, y, model_type=None):
+def getMetrics(model, x, y, model_type=None, class_problem = 'Binary'):
     
     metrics=[]
+    if (class_problem =='Binary'):
+        preds=model.predict(x) #get models results (0,1)
     
-    preds=model.predict(x) #get models results (0,1)
+        metrics.append(model.score(x,y)) #get models accuracy
     
-    metrics.append(model.score(x,y)) #get models accuracy
+        metrics.append(f1_score(y,preds)) #get f1 score
     
-    metrics.append(f1_score(y,preds)) #get f1 score
+        metrics.append(precision_score(y, preds)) #get precision score
     
-    metrics.append(precision_score(y, preds)) #get precision score
+        metrics.append(recall_score(y, preds)) #get recall score
     
-    metrics.append(recall_score(y, preds)) #get recall score
+    elif (class_problem == 'Multiclass'):
+        preds=model.predict(x) #get models results (0,1)
+    
+        metrics.append(model.score(x,y)) #get models accuracy
+    
+        metrics.append(f1_score(y,preds, average='weighted')) #get f1 score
+    
+        metrics.append(precision_score(y, preds, average='weighted')) #get precision score
+    
+        metrics.append(recall_score(y, preds, average='weighted')) #get recall score
     
     if (model_type == 'withProbs'):
         probs = model.predict_proba(x)[:,1] #get models probabilities
