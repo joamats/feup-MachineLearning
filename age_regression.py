@@ -16,7 +16,7 @@ from data_load import getDataset, getTestDataset
 from sklearn.linear_model import Ridge
 from matplotlib import pyplot as plt
 from sklearn.neural_network import MLPRegressor
-from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score
+from sklearn.metrics import f1_score, precision_score, recall_score, accuracy_score, balanced_accuracy_score
 from evaluation_metrics import getGeneralMetrics, displayGeneralMetrics, displayMetrics
 from sklearn.utils.class_weight import compute_sample_weight
 from sklearn.metrics import confusion_matrix
@@ -119,7 +119,7 @@ y_TR = np.concatenate((y_tr,y_val), axis=0)
 lanEnglish_TR = np.concatenate((lanEnglish_tr,lanEnglish_val), axis=0)
 
 sample_weight = compute_sample_weight("balanced", y_TR)
-reg.fit(x_TR, y_TR)#, sample_weight)
+reg.fit(x_TR, y_TR, sample_weight)
 
 pred_TR = reg.predict(x_TR)
 
@@ -180,7 +180,8 @@ print('\nTest Set')
 metrics = ([accuracy_score(y_TS_classes, pred_TS_classes),
             f1_score(y_TS_classes, pred_TS_classes, average='weighted'),
             precision_score(y_TS_classes, pred_TS_classes, average='weighted'),
-            recall_score(y_TS_classes, pred_TS_classes, average='weighted')]) #get recall score
+            recall_score(y_TS_classes, pred_TS_classes, average='weighted'),
+            balanced_accuracy_score(y_TS_classes, pred_TS_classes)]) #get recall score
 
 displayMetrics(metrics)
 
@@ -205,7 +206,8 @@ print('\nEnglish Results:')
 metrics = ([accuracy_score(y_TS_classes_english, pred_TS_classes_english),
             f1_score(y_TS_classes_english, pred_TS_classes_english, average='weighted'),
             precision_score(y_TS_classes_english, pred_TS_classes_english, average='weighted'),
-            recall_score(y_TS_classes_english, pred_TS_classes_english, average='weighted')]) #get recall score
+            recall_score(y_TS_classes_english, pred_TS_classes_english, average='weighted'),
+            balanced_accuracy_score(y_TS_classes_english, pred_TS_classes_english)])
     
 displayMetrics(metrics)
 
@@ -213,8 +215,9 @@ print('\nNative Results:')
 metrics = ([accuracy_score(y_TS_classes_native, pred_TS_classes_native),
             f1_score(y_TS_classes_native, pred_TS_classes_native, average='weighted'),
             precision_score(y_TS_classes_native, pred_TS_classes_native, average='weighted'),
-            recall_score(y_TS_classes_native, pred_TS_classes_native, average='weighted')]) #get recall score
-    
+            recall_score(y_TS_classes_native, pred_TS_classes_native, average='weighted'),
+            balanced_accuracy_score(y_TS_classes_native, pred_TS_classes_native)])
+
 displayMetrics(metrics)
 
 #%%

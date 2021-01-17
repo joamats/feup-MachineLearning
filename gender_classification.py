@@ -206,19 +206,9 @@ for number in range(10):
     y_val = y_val[:,1]
     y_TS = y_TS[:,1] #age
 
-<<<<<<< HEAD
     #model = genderSVM()
     #model = genderLogReg()
     model = genderRandomForest()
-=======
-
-    #model = genderSVM()
-    model = genderLogReg()
-    model = genderSVM()
-    #model = genderLogReg()
-
-    #model = genderRandomForest()
->>>>>>> 4d6d2d2480d8d8bda6e4e85f8de958ee91d55ddc
     #model = genderMLPClassifier()
     model.fit(x_tr, y_tr)
 

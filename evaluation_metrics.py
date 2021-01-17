@@ -9,7 +9,7 @@ Created on Mon Dec 28 18:43:16 2020
     
 """
 
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, roc_auc_score, f1_score, precision_score, recall_score, balanced_accuracy_score
+from sklearn.metrics import roc_auc_score, f1_score, precision_score, recall_score, balanced_accuracy_score
 import numpy as np
 
 #%% Receives models inputs and the trained model, returns its metrics
@@ -39,6 +39,7 @@ def getMetrics(model, x, y, model_type=None, class_problem = 'Binary'):
         metrics.append(recall_score(y, preds, average='weighted')) #get recall score
     
         metrics.append(balanced_accuracy_score(y, preds)) #get balanced accuracy
+        
     if (model_type == 'withProbs'):
         probs = model.predict_proba(x)[:,1] #get models probabilities
 
